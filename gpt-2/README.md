@@ -9,6 +9,7 @@ GPT-2 is a decoder only transformer
 GPT-2 has no encoder
 
 ## Learning sections
+* GPT-2 model code generation test (41:23) https://youtu.be/l8pRSuU81PU?t=2483
 * GPT-2 architecture workthrough (13:56) https://youtu.be/l8pRSuU81PU?t=836
 * Attension implementation (24:00) https://youtu.be/l8pRSuU81PU?t=1440
 
