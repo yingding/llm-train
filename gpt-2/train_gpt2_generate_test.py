@@ -253,4 +253,10 @@ for i in range (num_return_sequences):
     decoded = enc.decode(tokens)
     print(">", decoded)
 
+# remove the model from the accelerator
+del model
+import gc 
+gc.collect()
+torch.mps.empty_cache()
+
 
