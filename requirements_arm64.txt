@@ -9,3 +9,5 @@ tiktoken==0.7.0
 pydantic==2.8.2
 # typing guard back port to 3.8 
 typing-extensions==4.12.2
+
+mlx-lm==0.15.3
