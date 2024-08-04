@@ -18,6 +18,7 @@ source $HOME/VENV/gpt3.12/bin/activate
 PROJECT=gpt-2
 python3 -m pip install --upgrade pip
 python3 -m pip install --no-cache-dir -r ./requirements_arm64.txt
+# python3 -m pip install --no-cache-dir -r ./requirements_mac.txt
 # python3 -m pip install --no-cache-dir -r ./$PROJECT/requirements_arm64.txt
 ```
 
