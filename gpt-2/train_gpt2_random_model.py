@@ -208,9 +208,16 @@ class GPT(nn.Module):
     
 
 # ----------------------------
+# attempt to autodetect the device
+device = "cpu"
+if torch.cuda.is_available():
+    device = "cuda"
+elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+    device = "mps"
+print(f"using device: {device}")
+
 num_return_sequences = 5
 max_length = 30 
-accelerator = 'mps' # 'cuda' or 'mps'
 
 # model = GPT.from_pretrained('gpt2')
 # use the default config to generate a random weights model
@@ -219,7 +226,7 @@ model = GPT(GPTConfig())
 # put the model in eval mode, you not going to train it
 model.eval()
 # move the entire model to the accelerator, moving all the tensors to the GPU
-model.to(accelerator)
+model.to(device)
 
 # prefix tokens
 import tiktoken
@@ -227,7 +234,7 @@ enc = tiktoken.get_encoding('gpt2')
 tokens = enc.encode("Hello, I'm a language model,")
 tokens = torch.tensor(tokens, dtype=torch.long) # (8,)
 tokens = tokens.unsqueeze(0).repeat(num_return_sequences, 1) # (5, 8)
-x = tokens.to(accelerator)
+x = tokens.to(device)
 
 # generate! right now x is (B, T) where B = 5, T = 8
 # set the seed to 42
