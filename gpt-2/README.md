@@ -23,6 +23,9 @@ sudo asitop
 * asitop https://github.com/tlkh/asitop
 
 ## Progress
+https://youtu.be/l8pRSuU81PU?t=3178
+(52:58)
+
 https://youtu.be/l8pRSuU81PU?t=2619
 (43:39)
 
