@@ -23,6 +23,10 @@ sudo asitop
 * asitop https://github.com/tlkh/asitop
 
 ## Progress
+Training precision, dtype and TFLOPS of GPU
+https://youtu.be/l8pRSuU81PU?t=5020
+(1:23:40)
+
 https://youtu.be/l8pRSuU81PU?t=3178
 (52:58)
 
@@ -37,7 +41,7 @@ https://youtu.be/l8pRSuU81PU?t=2619
 * GELU paper https://arxiv.org/abs/1606.08415
 
 ## Note:
-INT8 is used for inference, but not training. INT8 has a uniform distribution. we shall use float to have match of the normal distribution of weights during the training.
+INT8 is used for inference, but not training. INT8 has a uniform spacing. we shall use float to have a better match of the normal distribution of weights during the training of neural networks.
 
 For training bfloat16 has more TFLOPS than the standard float32.
 
