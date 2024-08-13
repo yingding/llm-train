@@ -15,4 +15,5 @@ pydantic==2.8.2
 typing-extensions==4.12.2
 
 # mlx-lm==0.15.3
+mlx==0.16.3
 mlx-lm==0.16.1
