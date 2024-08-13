@@ -36,6 +36,14 @@ https://youtu.be/l8pRSuU81PU?t=2619
 * PyTorch GELU https://pytorch.org/docs/stable/generated/torch.nn.GELU.html
 * GELU paper https://arxiv.org/abs/1606.08415
 
+## Note:
+INT8 is used for inference, but not training. INT8 has a uniform distribution. we shall use float to have match of the normal distribution of weights during the training.
+
+For training bfloat16 has more TFLOPS than the standard float32.
+
+GPU Memory Bandwidth: the speed of which you can access the GPU memory.
+
+
 
 
 
