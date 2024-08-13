@@ -23,6 +23,9 @@ sudo asitop
 * asitop https://github.com/tlkh/asitop
 
 ## Progress
+https://youtu.be/l8pRSuU81PU?t=5382
+(1:29:42)
+
 Training precision, dtype and TFLOPS of GPU
 https://youtu.be/l8pRSuU81PU?t=5020
 (1:23:40)
