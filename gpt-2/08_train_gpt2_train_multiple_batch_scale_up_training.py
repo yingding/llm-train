@@ -311,8 +311,19 @@ training_data_path = os.path.join(parent_dir, "data/input.txt")
 
 
 # train_loader = DataLoaderLite(B=4, T=32, data_path=training_data_path)
+# Batch size B should be the number of power of 2 to run efficiently on the GPU
 train_loader = DataLoaderLite(B=16, T=1024, data_path=training_data_path)
 
+# set the float32 matmul precision to high, to use the high precision matmul kernels
+# 'highest' uses FP32, 'high' uses TF32
+# https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html
+# using TF32 speed up the nn.Linear operation, but the numbers are still Float32, 
+# we are memory bound, still need to keep large tensors in memory
+# BF16 exponent is 8 bits and mantissa is 7 bits, instead 10 bits in the TF32
+# if you use FP16, you need to use gradient scaling, to avoid underflow
+# BF16 is representing the same range as FP32, but with less precision
+torch.set_float32_matmul_precision('high')
+# torch.set_float32_matmul_precision('medium')
 
 # get logits 
 # use the default config to generate a random weights model
@@ -329,9 +340,15 @@ for i in range(50):
     x, y = train_loader.next_batch()
     # move tensors to the device
     x, y = x.to(device), y.to(device)
-    # start with a zero gradient
-    optimizer.zero_grad()
-    logits, loss = model(x, y)
+
+    # Enables autocasting for the forward pass (model + loss)
+    # with torch.autocast(device_type="cuda"):
+    with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
+        # start with a zero gradient
+        optimizer.zero_grad()
+        logits, loss = model(x, y)
+
+    # Exits the context manager before backward()
     # adds the loss to gradients
     loss.backward()
     # update the weights/parameters and decrease the loss
@@ -343,9 +360,11 @@ for i in range(50):
         torch.mps.synchronize()
     t1 = time.time()
     dt = (t1 - t0)*1000 # time difference in milliseconds
+    # thoughput in tokens per second during the training, an objective metric
+    tokens_per_sec = (train_loader.B * train_loader.T) / (t1 - t0)
     # loss is a tensor with a single element, loss.item() will convert tensor to a single float on CPU
     # loss is a tensor on the GPU, so we need to move it to the CPU to print it
-    print(f"step {i}, loss: {loss.item()}, dt: {dt:.2f}ms")
+    print(f"step {i}, loss: {loss.item()}, dt: {dt:.2f}ms, tokens/sec: {tokens_per_sec:.2f}")
 
 # we are overfitting a single batch, so that the transformer can memorize the sequence.
 # we shall see the loss decrease to zero

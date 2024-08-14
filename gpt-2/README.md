@@ -23,6 +23,11 @@ sudo asitop
 * asitop https://github.com/tlkh/asitop
 
 ## Progress
+torch.compile
+https://youtu.be/l8pRSuU81PU?t=6508
+(1:48:29)
+
+BF16 training
 https://youtu.be/l8pRSuU81PU?t=5382
 (1:29:42)
 
@@ -42,6 +47,7 @@ https://youtu.be/l8pRSuU81PU?t=2619
 * Attention Is All You Need (original transformer paper) https://arxiv.org/abs/1706.03762
 * PyTorch GELU https://pytorch.org/docs/stable/generated/torch.nn.GELU.html
 * GELU paper https://arxiv.org/abs/1606.08415
+* BF16 in pytorch (Automatic Mixed Precision) https://pytorch.org/tutorials/recipes/recipes/amp_recipe.html
 
 ## Note:
 INT8 is used for inference, but not training. INT8 has a uniform spacing. we shall use float to have a better match of the normal distribution of weights during the training of neural networks.
