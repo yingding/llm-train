@@ -287,6 +287,8 @@ class DataLoaderLite:
 
 # ----------------------------
 # attempt to autodetect the device
+
+import time 
 device = "cpu"
 if torch.cuda.is_available():
     device = "cuda"
@@ -307,7 +309,9 @@ elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
 parent_dir = os.path.dirname(__file__)
 training_data_path = os.path.join(parent_dir, "data/input.txt")
 
-train_loader = DataLoaderLite(B=4, T=32, data_path=training_data_path)
+
+# train_loader = DataLoaderLite(B=4, T=32, data_path=training_data_path)
+train_loader = DataLoaderLite(B=16, T=1024, data_path=training_data_path)
 
 
 # get logits 
@@ -320,6 +324,7 @@ model.to(device)
 # optimize 
 optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4)
 for i in range(50):
+    t0 = time.time()
     # keep the batch on the cpu, to not waste GPU memory
     x, y = train_loader.next_batch()
     # move tensors to the device
@@ -331,9 +336,16 @@ for i in range(50):
     loss.backward()
     # update the weights/parameters and decrease the loss
     optimizer.step()
+    # cpu building up work queue for the GPU, so we need to wait for the GPU to finish
+    if device == "cuda":
+        torch.cuda.synchronize()
+    elif device == "mps":
+        torch.mps.synchronize()
+    t1 = time.time()
+    dt = (t1 - t0)*1000 # time difference in milliseconds
     # loss is a tensor with a single element, loss.item() will convert tensor to a single float on CPU
     # loss is a tensor on the GPU, so we need to move it to the CPU to print it
-    print(f"step {i}, loss: {loss.item()}")
+    print(f"step {i}, loss: {loss.item()}, dt: {dt:.2f}ms")
 
 # we are overfitting a single batch, so that the transformer can memorize the sequence.
 # we shall see the loss decrease to zero
