@@ -3,7 +3,7 @@ ipywidgets==8.1.5
 applyllm==0.0.7
 
 # transformers==4.43.3
-transformers==4.44.1
+transformers==4.44.2
 
 # torch==2.3.1
 torch==2.4.0
@@ -16,7 +16,7 @@ pydantic==2.8.2
 # typing guard back port to 3.8 
 typing-extensions==4.12.2
 
-# mlx-lm==0.15.3
-mlx==0.16.3
+# mlx==0.16.3
+mlx==0.17.1
 # mlx-lm==0.16.1
-mlx-lm==0.17.0
+mlx-lm==0.17.1
