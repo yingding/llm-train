@@ -425,7 +425,8 @@ def get_lr(it):
 # optimizer = torch.optim.AdamW(model.parameters(), lr=6e-4, betas=(0.9, 0.95), eps=1e-8)
 optimizer = model.configure_optimizers(weight_decay=0.1, learning_rate=max_lr, device=device)
 
-# For MPS, per step take 103 second, for CUDA it takes 4 second
+# For MPS, per step take 103 second, for CUDA it takes 3 second per step. CUDA A100 is 36 times faster than MPS
+# processing 5000 tokens/sec for MPS, 180000 tokens/sec for CUDA
 for step in range(max_steps):
     t0 = time.time()
     # start with a zero gradient
