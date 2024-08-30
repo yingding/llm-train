@@ -52,6 +52,8 @@ class CausalSelfAttention(nn.Module):
         """ Flash Attention: kernel Fusion Operation"""
         # torch.compile is not detecting the Flash Attention, so we need to use the Flash Attention manually
         # utilize the online streaming softmax, to reduce the HBM memory usage
+        # note: the flops doesn't matter, the entire memory access hierarchy matters for fast training operation
+        # torch compile is great, and there are still a lot of optimization manually available to us.
         y = F.scaled_dot_product_attention(q, k, v, is_causal=True)
 
         """ replaced by the Flash Attention
