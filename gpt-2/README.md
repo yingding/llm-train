@@ -23,6 +23,10 @@ sudo asitop
 * asitop https://github.com/tlkh/asitop
 
 ## Progress
+Gradient Accumulation
+https://youtu.be/l8pRSuU81PU?t=9403
+(2:36:43)
+
 FlashAttention
 https://youtu.be/l8pRSuU81PU?t=7235
 (2:00:35)
@@ -54,6 +58,20 @@ https://youtu.be/l8pRSuU81PU?t=2619
 * BF16 in pytorch (Automatic Mixed Precision) https://pytorch.org/tutorials/recipes/recipes/amp_recipe.html
 * torch compile https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html
 * Flash Attention paper: https://arxiv.org/pdf/2205.14135
+
+## cosine decay learning rate curve
+* cosine decay learning rate schedule with warmup https://miro.medium.com/v2/resize:fit:720/format:webp/1*BJCssPOCn4u__NoAZs392w.png
+* cosine leanring rate decay https://scorrea92.medium.com/cosine-learning-rate-decay-e8b50aa455b
+
+## learning with batches
+You most learning to ignore the tokens that don't come up in your training set very often.
+You are learning very simple biases. Every simple you put through your network, is basically telling whether to use these tokens or not.
+The gradients from every single example are actually extremely highly correlated.
+They all look roughly the same.
+Later in the optimization, once you have learned all the simple stuff. 
+That is where the actual work starts. That is where the gradients become more decorrelated.
+
+
 
 ## Note:
 INT8 is used for inference, but not training. INT8 has a uniform spacing. we shall use float to have a better match of the normal distribution of weights during the training of neural networks.
