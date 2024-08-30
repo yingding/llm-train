@@ -48,6 +48,13 @@ class CausalSelfAttention(nn.Module):
         k = k.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # [B, nh, T, hs]
         q = q.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # [B, nh, T, hs]
         v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # [B, nh, T, hs]
+        
+        """ Flash Attention: kernel Fusion Operation"""
+        # torch.compile is not detecting the Flash Attention, so we need to use the Flash Attention manually
+        # utilize the online streaming softmax, to reduce the HBM memory usage
+        y = F.scaled_dot_product_attention(q, k, v, is_causal=True)
+
+        """ replaced by the Flash Attention
         # attention (materializes the large (T, T) matrix for all the queries and keys)
         # query and key to interact to give us the attention
         att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(k.size(-1)))
@@ -57,6 +64,8 @@ class CausalSelfAttention(nn.Module):
         att = F.softmax(att, dim=-1)
         # matrix multiple with the values, is a weighted sum of values of the tokens we find interesting 
         y = att @ v # (B, nh, T, T) x (B, nh, T, hs) -> (B, nh, T, hs)
+        """
+
         # perform a concatenation operation 
         y = y.transpose(1, 2).contiguous().view(B, T, C) # re-assemble all head outputs side by side
         # output project
