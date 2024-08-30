@@ -23,6 +23,10 @@ sudo asitop
 * asitop https://github.com/tlkh/asitop
 
 ## Progress
+Distributed Data Parallel
+https://youtu.be/l8pRSuU81PU?t=10015
+(2:46:55)
+
 Gradient Accumulation
 https://youtu.be/l8pRSuU81PU?t=9403
 (2:36:43)

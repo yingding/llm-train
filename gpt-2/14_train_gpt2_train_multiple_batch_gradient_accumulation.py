@@ -353,9 +353,17 @@ parent_dir = os.path.dirname(__file__)
 training_data_path = os.path.join(parent_dir, "data/input.txt")
 
 
+total_batch_size = 524288 # 2*19, ~0.5M in number of tokens
+B = 16 # micro batch size
+T = 1024 # sequence length
+assert total_batch_size % (B * T) == 0, "make sure the total batch size is divisible by B * T"
+grad_accum_steps = total_batch_size // (B * T)
+print(f"total desired batch size: {total_batch_size}")
+print(f"=> calculated gradient accumulation steps: {grad_accum_steps}")
+
 # train_loader = DataLoaderLite(B=4, T=32, data_path=training_data_path)
 # Batch size B should be the number of power of 2 to run efficiently on the GPU
-train_loader = DataLoaderLite(B=16, T=1024, data_path=training_data_path)
+train_loader = DataLoaderLite(B=B, T=T, data_path=training_data_path)
 
 # set the float32 matmul precision to high, to use the high precision matmul kernels
 # 'highest' uses FP32, 'high' uses TF32
@@ -415,30 +423,37 @@ def get_lr(it):
 
 # optimize
 # optimizer = torch.optim.AdamW(model.parameters(), lr=6e-4, betas=(0.9, 0.95), eps=1e-8)
-optimizer = model.configure_optimizers(weight_decay=0.1, learning_rate=6e-4, device=device)
+optimizer = model.configure_optimizers(weight_decay=0.1, learning_rate=max_lr, device=device)
 
+# For MPS, per step take 103 second, for CUDA it takes 4 second
 for step in range(max_steps):
     t0 = time.time()
-    # keep the batch on the cpu, to not waste GPU memory
-    x, y = train_loader.next_batch()
-    # move tensors to the device
-    x, y = x.to(device), y.to(device)
+    # start with a zero gradient
+    optimizer.zero_grad()
+    loss_accum = 0.0
+    for micro_step in range(grad_accum_steps):
+        # keep the batch on the cpu, to not waste GPU memory
+        x, y = train_loader.next_batch()
+        # move tensors to the device
+        x, y = x.to(device), y.to(device)
 
-    # Enables autocasting for the forward pass (model + loss)
-    # with torch.autocast(device_type="cuda"):
-    if device == "cuda":
-        with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
-            # start with a zero gradient
-            optimizer.zero_grad()
+        # Enables autocasting for the forward pass (model + loss)
+        # with torch.autocast(device_type="cuda"):
+        if device == "cuda":
+            with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
+                logits, loss = model(x, y)
+        elif device == "mps":
             logits, loss = model(x, y)
-    elif device == "mps":
-        optimizer.zero_grad()
-        logits, loss = model(x, y)
+        # model(x,y) use F.cross_entropy to calculate the loss
+        # the default reduction of F.cross_entropy is "mean"
+        # to compensate for the gradient accumulation, we need to divide the loss by the grad_accum_steps
+        loss = loss / grad_accum_steps
+        # detaching the tensor from the graph, to avoid the memory leak
+        loss_accum += loss.detach()
+        # Exits the context manager before backward()
+        # adds the loss to gradients
+        loss.backward()
 
-
-    # Exits the context manager before backward()
-    # adds the loss to gradients
-    loss.backward()
     # clip the global norm of the gradients to 1.0
     norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
     # determine and set the learning rate for this iteration
@@ -454,12 +469,14 @@ for step in range(max_steps):
         torch.mps.synchronize()
     t1 = time.time()
     dt = (t1 - t0)*1000 # time difference in milliseconds
+
+    tokens_processed = train_loader.B * train_loader.T * grad_accum_steps
     # thoughput in tokens per second during the training, an objective metric
-    tokens_per_sec = (train_loader.B * train_loader.T) / (t1 - t0)
+    tokens_per_sec = tokens_processed / (t1 - t0)
     # loss is a tensor with a single element, loss.item() will convert tensor to a single float on CPU
     # loss is a tensor on the GPU, so we need to move it to the CPU to print it
     # print(f"step {i}, loss: {loss.item()}, dt: {dt:.2f}ms, tokens/sec: {tokens_per_sec:.2f}")
-    print(f"step {step:4d} | loss: {loss.item():.6f} | lr {lr:.4e} | norm: {norm:.4f} | dt: {dt:.2f}ms | tokens/sec: {tokens_per_sec:.2f}")
+    print(f"step {step:4d} | loss: {loss_accum.item():.6f} | lr {lr:.4e} | norm: {norm:.4f} | dt: {dt:.2f}ms | tokens/sec: {tokens_per_sec:.2f}")
 # we are overfitting a single batch, so that the transformer can memorize the sequence.
 # we shall see the loss decrease to zero
 
