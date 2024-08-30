@@ -53,6 +53,7 @@ https://youtu.be/l8pRSuU81PU?t=2619
 * GELU paper https://arxiv.org/abs/1606.08415
 * BF16 in pytorch (Automatic Mixed Precision) https://pytorch.org/tutorials/recipes/recipes/amp_recipe.html
 * torch compile https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html
+* Flash Attention paper: https://arxiv.org/pdf/2205.14135
 
 ## Note:
 INT8 is used for inference, but not training. INT8 has a uniform spacing. we shall use float to have a better match of the normal distribution of weights during the training of neural networks.
