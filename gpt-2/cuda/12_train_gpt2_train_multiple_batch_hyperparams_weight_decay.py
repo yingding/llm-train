@@ -475,6 +475,9 @@ for step in range(max_steps):
 del model
 import gc 
 gc.collect()
-torch.mps.empty_cache()
+if device == "cuda":
+    torch.cuda.empty_cache()
+elif device == "mps":
+    torch.mps.empty_cache()
 
 import sys; sys.exit(0)
