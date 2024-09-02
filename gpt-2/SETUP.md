@@ -15,7 +15,7 @@ source ./envtools/create_env.sh -p ${ENV_ROOT}/${ENV_NAME} -v $VERSION
 ## Setup a local venv on Macosx Apple Silicon
 ```shell
 source $HOME/VENV/gpt3.12/bin/activate
-PROJECT=gpt-2
+# PROJECT=gpt-2
 python3 -m pip install --upgrade pip
 python3 -m pip install --no-cache-dir -r ./requirements_arm64.txt
 # python3 -m pip install --no-cache-dir -r ./requirements_mac.txt
