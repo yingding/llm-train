@@ -11,8 +11,9 @@ from applyllm.accelerators import (
 import os
 
 # set up the torch mps environment and huggingface cache home, before importing datasets and transformers
-AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP.get("mac_local"))
-
+dev_host="mac_local"
+AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP.get(dev_host))
+print(os.environ['XDG_CACHE_HOME'])
 # ----------------------------
 """
 https://github.com/karpathy/build-nanogpt/blob/master/train_gpt2.py
@@ -349,7 +350,9 @@ elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
 
 # device = "cpu" # override 
 # get the current file parent directory
-parent_dir = os.path.dirname(__file__)
+current_dir = os.path.dirname(__file__)
+# get the parent dir of the current_dir
+parent_dir = os.path.dirname(current_dir)
 training_data_path = os.path.join(parent_dir, "data/input.txt")
 
 
@@ -373,8 +376,10 @@ train_loader = DataLoaderLite(B=B, T=T, data_path=training_data_path)
 # BF16 exponent is 8 bits and mantissa is 7 bits, instead 10 bits in the TF32
 # if you use FP16, you need to use gradient scaling, to avoid underflow
 # BF16 is representing the same range as FP32, but with less precision
-torch.set_float32_matmul_precision('high')
-# torch.set_float32_matmul_precision('medium')
+if device == "cuda":
+    torch.set_float32_matmul_precision('medium')
+elif device == "mps":
+    torch.set_float32_matmul_precision('high')
 
 # get logits 
 # use the default config to generate a random weights model
@@ -491,6 +496,9 @@ for step in range(max_steps):
 del model
 import gc 
 gc.collect()
-torch.mps.empty_cache()
+if device == "cuda":
+    torch.cuda.empty_cache()
+elif device == "mps":
+    torch.mps.empty_cache()
 
 import sys; sys.exit(0)

@@ -11,7 +11,7 @@ from applyllm.accelerators import (
 import os
 
 # set up the torch mps environment and huggingface cache home, before importing datasets and transformers
-dev_host="kf_notebook"
+dev_host="mac_local"
 AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP.get(dev_host))
 print(os.environ['XDG_CACHE_HOME'])
 
