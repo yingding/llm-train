@@ -367,8 +367,10 @@ train_loader = DataLoaderLite(B=16, T=1024, data_path=training_data_path)
 # BF16 exponent is 8 bits and mantissa is 7 bits, instead 10 bits in the TF32
 # if you use FP16, you need to use gradient scaling, to avoid underflow
 # BF16 is representing the same range as FP32, but with less precision
-torch.set_float32_matmul_precision('high')
-# torch.set_float32_matmul_precision('medium')
+if device == "cuda":
+    torch.set_float32_matmul_precision('medium')
+elif device == "mps":
+    torch.set_float32_matmul_precision('high')
 
 # get logits 
 # use the default config to generate a random weights model
