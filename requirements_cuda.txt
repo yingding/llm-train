@@ -1,0 +1,12 @@
+## package already available in kubeflow notebook custom image
+# ipywidgets==8.1.5
+# transformers==4.44.2
+# torch==2.4.0
+# matplotlib==3.9.2
+# pydantic==2.8.2
+# typing guard back port to 3.8 
+# typing-extensions==4.12.2
+
+## Project specific packages
+applyllm==0.0.7
+tiktoken==0.7.0
