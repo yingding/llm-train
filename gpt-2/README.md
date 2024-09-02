@@ -23,6 +23,10 @@ sudo asitop
 * asitop https://github.com/tlkh/asitop
 
 ## Progress
+Open WebText dataset
+https://youtu.be/l8pRSuU81PU?t=11423
+(3:10:23)
+
 Distributed Data Parallel
 https://youtu.be/l8pRSuU81PU?t=10015
 (2:46:55)
