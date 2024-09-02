@@ -23,7 +23,7 @@ sudo asitop
 * asitop https://github.com/tlkh/asitop
 
 ## Progress
-Open WebText dataset
+Open WebText, Common Crawl (filtered), SlimPajama (subset of RedPajam), FineWeb, FineWeb-Edu dataset
 https://youtu.be/l8pRSuU81PU?t=11423
 (3:10:23)
 
@@ -66,6 +66,13 @@ https://youtu.be/l8pRSuU81PU?t=2619
 * BF16 in pytorch (Automatic Mixed Precision) https://pytorch.org/tutorials/recipes/recipes/amp_recipe.html
 * torch compile https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html
 * Flash Attention paper: https://arxiv.org/pdf/2205.14135
+
+## LLM Datasets, Data Mixture
+### 1. FineWeb (Common Crawl filtered)
+* Paper https://arxiv.org/abs/2406.17557
+* Huggingface FineWeb (sample-10BT) https://huggingface.co/spaces/HuggingFaceFW/blogpost-fineweb-v1
+* Huggingface FineWeb-edu (sample-10BT) https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu
+
 
 ## cosine decay learning rate curve
 * cosine decay learning rate schedule with warmup https://miro.medium.com/v2/resize:fit:720/format:webp/1*BJCssPOCn4u__NoAZs392w.png
