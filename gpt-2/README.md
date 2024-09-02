@@ -23,6 +23,10 @@ sudo asitop
 * asitop https://github.com/tlkh/asitop
 
 ## Progress
+Validation, Logging
+https://youtu.be/l8pRSuU81PU?t=12192
+(3:23:12)
+
 Open WebText, Common Crawl (filtered), SlimPajama (subset of RedPajam), FineWeb, FineWeb-Edu dataset
 https://youtu.be/l8pRSuU81PU?t=11423
 (3:10:23)
