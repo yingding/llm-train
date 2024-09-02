@@ -351,7 +351,9 @@ elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
 
 # device = "cpu" # override 
 # get the current file parent directory
-parent_dir = os.path.dirname(__file__)
+current_dir = os.path.dirname(__file__)
+# get the parent dir of the current_dir
+parent_dir = os.path.dirname(current_dir)
 training_data_path = os.path.join(parent_dir, "data/input.txt")
 
 
