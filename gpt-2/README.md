@@ -5,8 +5,15 @@
 ## GPT-2
 
 GPT-2 is a decoder only transformer
-
 GPT-2 has no encoder
+
+## About this repo
+This repo documents the pretraining steps for build a GPT2 124M model from scratch.
+The result model is only capable of predict the next token.
+
+If you want to talk to the model, you will need to fine-tune the pretrained model to a chat format using supervised fine-tuning (SFT) by using further training datasets with a "user", "assistant" structure. Swap out the datasets and continue the training.
+
+Wrap it up: **pretraining** phase of the LLM is documented in this repo, without *fine tuning* phase.
 
 ## Learning sections
 * GPT-2 model code generation test (41:23) https://youtu.be/l8pRSuU81PU?t=2483
@@ -23,6 +30,18 @@ sudo asitop
 * asitop https://github.com/tlkh/asitop
 
 ## Progress
+Eleuther Eval Harness (Eval dataset)
+https://youtu.be/l8pRSuU81PU?t=14102
+(3:55:02)
+
+Shuffle documents order in the training set
+https://youtu.be/l8pRSuU81PU?t=13791
+(3:49:52)
+
+HellaSwag Evaluation Dataset
+https://youtu.be/l8pRSuU81PU?t=12526
+(3:28:46)
+
 Validation, Logging
 https://youtu.be/l8pRSuU81PU?t=12192
 (3:23:12)
@@ -34,6 +53,7 @@ https://youtu.be/l8pRSuU81PU?t=11423
 Distributed Data Parallel
 https://youtu.be/l8pRSuU81PU?t=10015
 (2:46:55)
+**Goon**
 
 Gradient Accumulation
 https://youtu.be/l8pRSuU81PU?t=9403
@@ -76,6 +96,15 @@ https://youtu.be/l8pRSuU81PU?t=2619
 * Paper https://arxiv.org/abs/2406.17557
 * Huggingface FineWeb (sample-10BT) https://huggingface.co/spaces/HuggingFaceFW/blogpost-fineweb-v1
 * Huggingface FineWeb-edu (sample-10BT) https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu
+
+### 2. HellaSwag eval
+Sentence completion dataset, provides early signal of improvement for small sized language model
+* Paper https://arxiv.org/pdf/1905.07830
+* Dataset https://rowanzellers.com/hellaswag/
+
+### 3. Eleuther Eval Harness eval
+Further model evaluation dataset and methods
+* repo: https://github.com/EleutherAI/lm-evaluation-harness
 
 
 ## cosine decay learning rate curve
