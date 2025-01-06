@@ -22,11 +22,13 @@ $env:ENV_ROOT="$HOME\Documents\VENV";
 # see the right python sdk is activated
 which python
 # PROJECT=gpt-2
-python3 -m pip install --upgrade pip
+# important to use python, but not python3
+python -m pip install --upgrade pip
 # cd the project from power shell
-python3 -m pip install --no-cache-dir -r ./requirements_winx64.txt
+python -m pip install --no-cache-dir -r ./requirements_winx64.txt
 ```
-Note: 
+Note:
+* use `python` instead of `python3`, since it is linked to wrong python SDK 
 * encounter run issue, use `Set-ExecutionPolicy RemoteSigned` as admin to set the run privilege from powershell7 and restart powershell session.
 
 ## Add a jupyter notebook kernel to VENV
@@ -34,8 +36,8 @@ Note:
 VENV_NAME="gpt3.12"
 VENV_DIR="$HOME/VENV"
 source ${VENV_DIR}/${VENV_NAME}/bin/activate;
-python3 -m pip install --upgrade pip
-python3 -m pip install ipykernel
+python -m pip install --upgrade pip
+python -m pip install ipykernel
 deactivate
 ```
 
@@ -44,7 +46,7 @@ We need to reactivate the venv so that the ipython kernel is available after ins
 VENV_NAME="gpt3.12"
 VENV_DIR="$HOME/VENV"
 source ${VENV_DIR}/${VENV_NAME}/bin/activate;
-python3 -m ipykernel install --user --name=${VENV_NAME} --display-name ${VENV_NAME}
+python -m ipykernel install --user --name=${VENV_NAME} --display-name ${VENV_NAME}
 ```
 Note: 
 * restart the vs code, to select the venv as jupyter notebook kernel
@@ -59,9 +61,20 @@ VENV_NAME="gpt3.12"
 jupyter kernelspec uninstall -y ${VENV_NAME}
 ```
 
-## Remove all package from venv
-```shell 
-python3 -m pip freeze | xargs pip uninstall -y
+## (Optional) Remove all package from venv
+For the venv python
+```powershell
+which python
+python -m pip freeze | %{$_.split('==')} | %{python -m pip uninstall -y $_}
+python -m pip list
+```
+
+Note: `which` cmd can be installed from powershell with `winget install which`
+
+For the system python3
+```powershell
+which python3
+python3 -m pip freeze | %{$_.split('==')} | %{python3 -m pip uninstall -y $_}
 python3 -m pip list
 ```
 
