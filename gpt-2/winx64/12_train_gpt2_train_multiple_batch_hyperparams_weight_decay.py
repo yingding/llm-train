@@ -488,6 +488,9 @@ for step in range(max_steps):
         torch.cuda.synchronize()
     elif device == "mps":
         torch.mps.synchronize()
+    elif device == "npu":
+        # torch.npu.synchronize()
+        torch.xpu.synchronize()
     t1 = time.time()
     dt = (t1 - t0)*1000 # time difference in milliseconds
     # thoughput in tokens per second during the training, an objective metric
