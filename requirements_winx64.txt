@@ -1,0 +1,15 @@
+# ipywidgets==8.1.3
+ipywidgets==8.1.5
+applyllm==0.0.7
+
+# transformers==4.44.0
+transformers==4.47.1
+
+# torch==2.2.2
+torch==2.5.1
+matplotlib==3.10.0
+tiktoken==0.8.0
+pydantic==2.8.2
+# typing guard back port to 3.8 
+typing-extensions==4.12.2
+# bitsandbytes==0.43.3
