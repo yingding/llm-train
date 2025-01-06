@@ -364,9 +364,15 @@ elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
 
 # device = "cpu" # override 
 # get the current file parent directory
-parent_dir = os.path.dirname(__file__)
-training_data_path = os.path.join(parent_dir, "data/input.txt")
+# parent_dir = os.path.dirname(__file__)
+parent_dir = os.path.dirname(os.path.dirname(__file__))
+training_data_path = os.path.join(parent_dir, "data", "input.txt")
+# training_data_path = os.path.join(parent_dir, "data/input.txt")
+# if sys.platform == "win32":
+#     training_data_path = os.path.join(parent_dir, "data", "input.txt")
 
+print(parent_dir)
+print(training_data_path)
 
 # train_loader = DataLoaderLite(B=4, T=32, data_path=training_data_path)
 # Batch size B should be the number of power of 2 to run efficiently on the GPU
