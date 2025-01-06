@@ -32,21 +32,25 @@ Note:
 * encounter run issue, use `Set-ExecutionPolicy RemoteSigned` as admin to set the run privilege from powershell7 and restart powershell session.
 
 ## Add a jupyter notebook kernel to VENV
-```shell
-VENV_NAME="gpt3.12"
-VENV_DIR="$HOME/VENV"
-source ${VENV_DIR}/${VENV_NAME}/bin/activate;
+```powershell
+$env:VERSION = "3.12";
+$env:PREFIX = "gpt";
+$env:ENV_NAME = "$env:PREFIX$env:VERSION";
+$env:ENV_ROOT="$HOME\Documents\VENV";
+& "$env:ENV_ROOT\$env:ENV_NAME\Scripts\Activate.ps1";
 python -m pip install --upgrade pip
 python -m pip install ipykernel
 deactivate
 ```
 
 We need to reactivate the venv so that the ipython kernel is available after installation.
-```shell
-VENV_NAME="gpt3.12"
-VENV_DIR="$HOME/VENV"
-source ${VENV_DIR}/${VENV_NAME}/bin/activate;
-python -m ipykernel install --user --name=${VENV_NAME} --display-name ${VENV_NAME}
+```powershell
+$env:VERSION = "3.12";
+$env:PREFIX = "gpt";
+$env:ENV_NAME = "$env:PREFIX$env:VERSION";
+$env:ENV_ROOT="$HOME\Documents\VENV";
+& "$env:ENV_ROOT\$env:ENV_NAME\Scripts\Activate.ps1";
+python -m ipykernel install --user --name=$env:ENV_NAME --display-name $env:ENV_NAME
 ```
 Note: 
 * restart the vs code, to select the venv as jupyter notebook kernel
@@ -56,9 +60,11 @@ Reference:
 * https://anbasile.github.io/posts/2017-06-25-jupyter-venv/
 
 ## Remove ipykernel
-```shell
-VENV_NAME="gpt3.12"
-jupyter kernelspec uninstall -y ${VENV_NAME}
+```powershell
+$env:VERSION = "3.12";
+$env:PREFIX = "gpt";
+$env:ENV_NAME = "$env:PREFIX$env:VERSION";
+jupyter kernelspec uninstall -y $env:ENV_NAME
 ```
 
 ## (Optional) Remove all package from venv
