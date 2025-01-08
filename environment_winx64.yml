@@ -7,7 +7,9 @@ channels:
   - https://repo.anaconda.com/pkgs/msys2
 dependencies:
 - python==3.12
-- libuv==1.48.0 
+- libuv==1.48.0
+- libjpeg-turbo
+- libpng 
 - pip>=24.2
 - pip:
   # works for regular pip packages
