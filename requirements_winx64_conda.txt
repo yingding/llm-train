@@ -6,7 +6,7 @@ applyllm==0.0.7
 transformers==4.47.1
 
 # torch==2.2.2
-torch==2.5.1
+# torch==2.5.1
 matplotlib==3.10.0
 tiktoken==0.8.0
 pydantic==2.8.2
@@ -32,4 +32,4 @@ intel-npu-acceleration-library==1.4.0
 # intel-extension-for-pytorch==2.5.10+xpu
 # the intel win package are compiled with nmpy 1.xx
 
-# numpy<=1.26.4
+numpy<=1.26.4

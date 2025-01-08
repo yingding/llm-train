@@ -1,0 +1,17 @@
+# run: conda env create --file environment.yml
+name: C:\Users\yingdingwang\Documents\VENV\gpt3.12conda
+channels:
+  - defaults
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
+  - https://repo.anaconda.com/pkgs/msys2
+dependencies:
+- python==3.12
+- libuv==1.48.0 
+- pip>=24.2
+- pip:
+  # works for regular pip packages
+  # - docx
+  # and for wheels
+  # a lot will be installed due to dependency to applyllm
+  - -r requirements_winx64_conda.txt
