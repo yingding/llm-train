@@ -1,25 +1,30 @@
 import math
 from dataclasses import dataclass
 import torch
+import torch.backends.xeon
+import torch.backends.xnnpack
 import torch.nn as nn
 from torch.nn import functional as F
-import intel_npu_acceleration_library
+
+import intel_extension_for_pytorch as ipex
+# XPU/GPU and NPU doesn't work together using torch
+# import intel_npu_acceleration_library
 
 from applyllm.accelerators import (
     AcceleratorHelper, 
-    #DIR_MODE_MAP
+    # DIR_MODE_MAP
 )
-import os
+import os, sys
 
 # path for windows
 from win_patch import (
     DirectorySetting,
     DIR_MODE_MAP
 )
-
 # TODO: rename the init_mps_torch to init_env_torch(dir_setting: DirectorySetting)
 AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP["win_local"])
-# import intel_npu_acceleration_library
+
+
 
 # ----------------------------
 """
@@ -217,15 +222,34 @@ class GPT(nn.Module):
     
 
 # ----------------------------
+# attempt to autodetect the device
+device = "cpu"
+if torch.cuda.is_available():
+    device = "cuda"
+elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+    device = "mps"
+# elif hasattr(torch.backends, "npu"):
+#     # hasattr(torch.backends, "npu"):
+# elif hasattr(torch.backends, "xpu"):
+#     device = "xpu"
+elif sys.platform == "win32":
+    device = "xpu"
+print(f"using device: {device}")
+
 num_return_sequences = 5
 max_length = 30 
-accelerator = 'npu' # 'cuda', 'mps' or 'npu'
 
-model = GPT.from_pretrained('gpt2')
+# model = GPT.from_pretrained('gpt2')
+# use the default config to generate a random weights model
+model = GPT(GPTConfig())
+
 # put the model in eval mode, you not going to train it
 model.eval()
 # move the entire model to the accelerator, moving all the tensors to the GPU
-model.to(accelerator)
+model.to(device)
+
+# https://intel.github.io/intel-extension-for-pytorch/xpu/latest/tutorials/getting_started.html
+model = ipex.optimize(model, dtype=torch.float32)
 
 # prefix tokens
 import tiktoken
@@ -233,7 +257,7 @@ enc = tiktoken.get_encoding('gpt2')
 tokens = enc.encode("Hello, I'm a language model,")
 tokens = torch.tensor(tokens, dtype=torch.long) # (8,)
 tokens = tokens.unsqueeze(0).repeat(num_return_sequences, 1) # (5, 8)
-x = tokens.to(accelerator)
+x = tokens.to(device)
 
 # generate! right now x is (B, T) where B = 5, T = 8
 # set the seed to 42
@@ -266,10 +290,9 @@ for i in range (num_return_sequences):
 del model
 import gc 
 gc.collect()
-if accelerator == 'mps':
+if device == 'mps':
     torch.mps.empty_cache()
-elif accelerator == 'npu':
-    pass 
-    # intel_npu_acceleration_library.cleanup()
-
-
+elif device == 'npu':
+    pass
+elif device == 'xpu':
+    pass
