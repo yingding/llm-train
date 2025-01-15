@@ -117,10 +117,9 @@ Note:
 * use `python` instead of `python3`, since it is linked to wrong python SDK 
 * encounter run issue, use `Set-ExecutionPolicy RemoteSigned` as admin to set the run privilege from powershell7 and restart powershell session.
 
-## Connect from native windows VS code to WSL venv
 
-```shell
-```
+
+## Connect from native windows VS code to WSL venv
 
 Reference:
 * https://code.visualstudio.com/docs/remote/wsl
