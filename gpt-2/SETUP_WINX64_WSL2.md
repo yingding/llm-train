@@ -1,6 +1,20 @@
 # gpt-2: python package
 This repository contains code of [applyllm](https://pypi.org/project/applyllm/) python PyPI package, for loading and training open source llm models e.g. LlaMA2, Mixtral 8x7B, etc.
 
+## Activate WSL2 on windows 11
+
+Install WSL from powershell with
+```powershell
+wsl --install
+```
+Reference:
+* [Install WSL | Microsoft Learn](https://learn.microsoft.com/en-us/windows/wsl/install)
+
+Base commands
+```powershell
+wsl --status
+```
+
 ## Creat VENV
 use the `create_env.sh` script to create a venv on macosx
 
