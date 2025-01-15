@@ -60,7 +60,7 @@ python3 -m pip list
 
 ## Issues
 
-### TqdmWarning: IProgress not found. Please update jupyter and ipywidgets
+### Warning: IProgress not found. Please update jupyter and ipywidgets
 ```
 pip install ipywidgets
 ```

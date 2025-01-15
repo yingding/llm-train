@@ -86,8 +86,8 @@ python3 -m pip list
 
 ## Issues
 
-### TqdmWarning: IProgress not found. Please update jupyter and ipywidgets
-```
+### Warning: IProgress not found. Please update jupyter and ipywidgets
+```powershell
 pip install ipywidgets
 ```
 which will update the ipywidgets and also the widgetsnbextension.
