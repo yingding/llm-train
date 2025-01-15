@@ -15,55 +15,140 @@ Base commands
 wsl --status
 ```
 
-## Creat VENV
-use the `create_env.sh` script to create a venv on macosx
-
-```powershell
-$env:VERSION = "3.12";
-$env:PREFIX = "gpt";
-$env:ENV_NAME = "$env:PREFIX$env:VERSION";
-$env:ENV_ROOT="$HOME\Documents\VENV";
-# source ./envtools/create_env.sh -p ${ENV_ROOT}/${ENV_NAME} -v $VERSION
+login as specific user
+```shell
+wsl --user <Username>
 ```
 
-## Setup a local venv on Macosx Apple Silicon
+the current home dir is:
+```
+/mnt/c/Users/<Username>
+```
+
+Reference:
+* [Basic commands for WSL | Microsoft Learn](https://learn.microsoft.com/en-us/windows/wsl/basic-commands)
+
+Install default python3.12 
 ```powershell
-$env:VERSION = "3.12";
-$env:PREFIX = "gpt";
-$env:ENV_NAME = "$env:PREFIX$env:VERSION";
-$env:ENV_ROOT="$HOME\Documents\VENV";
-& "$env:ENV_ROOT\$env:ENV_NAME\Scripts\Activate.ps1";
-# see the right python sdk is activated
-which python
-# PROJECT=gpt-2
-# important to use python, but not python3
-python -m pip install --upgrade pip
-# cd the project from power shell
-python -m pip install --no-cache-dir -r ./requirements_winx64.txt
+sudo apt-get update
+sudo apt-get install libpython3-dev
+sudo apt-get install python3-venv
+```
+
+Update the WSL2 Ubuntu OS
+```
+which python3;
+# /usr/bin/python3
+lsb_release -a;
+# Description:    Ubuntu 24.04.1 LTS
+echo $SHELL
+# /bin/bash
+
+sudo apt update;
+sudo apt upgrade;
+```
+
+## Install python3.12 on WSL2
+
+Python3.12
+```shell
+sudo apt install -y python3.12 python3.12-venv
+```
+
+<!--
+## Install python3.11 on WSL2
+Add universal repository
+```shell
+sudo add-apt-repository universe;
+sudo apt update
+```
+
+Python3.11
+```shell
+sudo apt install -y python3.11 python3.11-venv
+```
+
+Reference:
+* https://askubuntu.com/a/1398569
+* https://rothoma2.com/2023/06/03/how-to-install-python-3-11-on-ubuntu-wsl/
+-->
+
+## Creat VENV
+```shell
+VERSION="3.12";
+PREFIX="gpt";
+FLAVOUR="wsl";
+ENV_NAME="${PREFIX}${VERSION}${FLAVOUR}";
+ENV_ROOT="/mnt/c/Users/yingdingwang/Documents/VENV";
+ENV_PATH="${ENV_ROOT}/${ENV_NAME}";
+which python$VERSION;
+python${VERSION} -m venv $ENV_PATH;
+```
+
+Activate the VENV from WSL bash terminal:
+```shell
+VERSION="3.12";
+PREFIX="gpt";
+FLAVOUR="wsl";
+ENV_NAME="${PREFIX}${VERSION}${FLAVOUR}";
+ENV_ROOT="/mnt/c/Users/yingdingwang/Documents/VENV";
+ENV_PATH="${ENV_ROOT}/${ENV_NAME}";
+
+source ${ENV_PATH}/bin/activate;
+which python$VERSION;
+python${VERSION} -m pip install --upgrade pip;
+```
+
+## Install packages for WSL python venv 
+```shell
+# file location from Windows directory
+PROJ_ROOT="/mnt/c/Users/yingdingwang/Documents/VCS";
+PROJ_NAME="llm-train";
+PROJ_PATH="${PROJ_ROOT}/${PROJ_NAME}";
+cd ${PROJ_PATH};
+
+which python;
+python -m pip install --no-cache-dir -r ./requirements_winx64_wsl.txt;
 ```
 Note:
 * use `python` instead of `python3`, since it is linked to wrong python SDK 
 * encounter run issue, use `Set-ExecutionPolicy RemoteSigned` as admin to set the run privilege from powershell7 and restart powershell session.
 
+## Connect from native windows VS code to WSL venv
+
+```shell
+```
+
+Reference:
+* https://code.visualstudio.com/docs/remote/wsl
+
 ## Add a jupyter notebook kernel to VENV
 ```powershell
-$env:VERSION = "3.12";
-$env:PREFIX = "gpt";
-$env:ENV_NAME = "$env:PREFIX$env:VERSION";
-$env:ENV_ROOT="$HOME\Documents\VENV";
-& "$env:ENV_ROOT\$env:ENV_NAME\Scripts\Activate.ps1";
-python -m pip install --upgrade pip
-python -m pip install ipykernel
+VERSION="3.12";
+PREFIX="gpt";
+FLAVOUR="wsl";
+ENV_NAME="${PREFIX}${VERSION}${FLAVOUR}";
+ENV_ROOT="/mnt/c/Users/yingdingwang/Documents/VENV";
+ENV_PATH="${ENV_ROOT}/${ENV_NAME}";
+source ${ENV_PATH}/bin/activate;
+
+which python;
+python -m pip install --upgrade pip;
+python -m pip install ipykernel;
 deactivate
 ```
 
 We need to reactivate the venv so that the ipython kernel is available after installation.
-```powershell
-$env:VERSION = "3.12";
-$env:PREFIX = "gpt";
-$env:ENV_NAME = "$env:PREFIX$env:VERSION";
-$env:ENV_ROOT="$HOME\Documents\VENV";
-& "$env:ENV_ROOT\$env:ENV_NAME\Scripts\Activate.ps1";
+```shell
+VERSION="3.12";
+PREFIX="gpt";
+FLAVOUR="wsl";
+ENV_NAME="${PREFIX}${VERSION}${FLAVOUR}";
+ENV_ROOT="/mnt/c/Users/yingdingwang/Documents/VENV";
+ENV_PATH="${ENV_ROOT}/${ENV_NAME}";
+source ${ENV_PATH}/bin/activate;
+
+which python;
 python -m ipykernel install --user --name=$env:ENV_NAME --display-name $env:ENV_NAME
 ```
 Note: 

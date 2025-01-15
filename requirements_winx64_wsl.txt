@@ -1,0 +1,32 @@
+ipywidgets==8.1.5
+applyllm==0.0.7
+
+transformers==4.47.1
+
+matplotlib==3.10.0
+tiktoken==0.8.0
+pydantic==2.8.2
+# typing guard back port to 3.8 
+typing-extensions==4.12.2
+# bitsandbytes==0.43.3
+
+# intel npu extension for torch
+# for intel data center gpus 
+# https://github.com/intel/intel-extension-for-pytorch
+# intel-extension-for-pytorch
+
+# NPU for Intel Core Ultra Processor line
+# https://pypi.org/project/intel-npu-acceleration-library/
+# intel-npu-acceleration-library==1.4.0
+
+# examples with torch
+# https://github.com/intel/intel-npu-acceleration-library/blob/main/examples/train_mnist.py
+
+# -f https://pytorch-extension.intel.com/release-whl/stable/mtl/us/
+# torch==2.5.1+cxx11.abi 
+# torchvision==0.20.1+cxx11.abi 
+# torchaudio==2.5.1+cxx11.abi 
+# intel-extension-for-pytorch==2.5.10+xpu
+# the intel win package are compiled with nmpy 1.xx
+
+numpy<=1.26.4
