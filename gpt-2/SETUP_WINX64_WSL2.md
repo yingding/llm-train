@@ -95,8 +95,11 @@ ENV_ROOT="/mnt/c/Users/yingdingwang/Documents/VENV";
 ENV_PATH="${ENV_ROOT}/${ENV_NAME}";
 
 source ${ENV_PATH}/bin/activate;
-which python$VERSION;
-python${VERSION} -m pip install --upgrade pip;
+# which python$VERSION;
+# python${VERSION} -m pip install --upgrade pip;
+
+which python;
+python -m pip install --upgrade pip;
 ```
 
 ## Install packages for WSL python venv 
