@@ -163,7 +163,6 @@ source ${ENV_PATH}/bin/activate;
 
 which python;
 python -m ipykernel install --user --name=${ENV_NAME} --display-name ${ENV_NAME};
-python -m ipykernel install --user --name=${ENV_NAME} --display-name ${ENV_NAME};
 ```
 Note: 
 * restart the vs code, to select the venv as jupyter notebook kernel
@@ -205,7 +204,7 @@ Reference:
 ## Issues
 
 ### Warning: IProgress not found. Please update jupyter and ipywidgets
-```
+```shell
 pip install ipywidgets
 ```
 which will update the ipywidgets and also the widgetsnbextension.
