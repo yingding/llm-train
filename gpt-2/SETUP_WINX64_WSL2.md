@@ -178,6 +178,16 @@ python3 -m pip freeze | xargs pip uninstall -y
 python3 -m pip list
 ```
 
+# Install the Intel Driver on WSL2
+```shell
+wget -qO - https://repositories.intel.com/gpu/intel-graphics.key |
+    sudo gpg --yes --dearmor --output /usr/share/keyrings/intel-graphics.gpg
+```
+
+Reference:
+* https://dgpu-docs.intel.com/driver/installation.html#ubuntu
+* https://medium.com/intel-analytics-software/stable-diffusion-with-intel-arc-gpus-f2986bba8365
+
 ## Issues
 
 ### Warning: IProgress not found. Please update jupyter and ipywidgets

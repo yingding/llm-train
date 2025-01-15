@@ -19,6 +19,7 @@ typing-extensions==4.12.2
 # https://pypi.org/project/intel-npu-acceleration-library/
 
 # The NPU is only for Windows Native environment, not in WSL
+# https://github.com/intel/intel-npu-acceleration-library/issues/13
 # intel-npu-acceleration-library==1.4.0
 
 # examples with torch
