@@ -16,27 +16,26 @@ wsl --status
 ```
 
 login as specific user
-```shell
+```powershell
 wsl --user <Username>
 ```
+this will change to the bash shell.
 
 the current home dir is:
-```
-/mnt/c/Users/<Username>
-```
+`/mnt/c/Users/<Username>` 
 
 Reference:
 * [Basic commands for WSL | Microsoft Learn](https://learn.microsoft.com/en-us/windows/wsl/basic-commands)
 
 Install default python3.12 
-```powershell
+```shell
 sudo apt-get update
 sudo apt-get install libpython3-dev
 sudo apt-get install python3-venv
 ```
 
 Update the WSL2 Ubuntu OS
-```
+```shell
 which python3;
 # /usr/bin/python3
 lsb_release -a;
@@ -118,14 +117,13 @@ Note:
 * encounter run issue, use `Set-ExecutionPolicy RemoteSigned` as admin to set the run privilege from powershell7 and restart powershell session.
 
 
-
 ## Connect from native windows VS code to WSL venv
-
 Reference:
-* https://code.visualstudio.com/docs/remote/wsl
+* https://code.visualstudio.com/docs/remote/wsl 
+
 
 ## Add a jupyter notebook kernel to VENV
-```powershell
+```shell
 VERSION="3.12";
 PREFIX="gpt";
 FLAVOUR="wsl";
@@ -151,7 +149,7 @@ ENV_PATH="${ENV_ROOT}/${ENV_NAME}";
 source ${ENV_PATH}/bin/activate;
 
 which python;
-python -m ipykernel install --user --name=$env:ENV_NAME --display-name $env:ENV_NAME
+python -m ipykernel install --user --name=${ENV_NAME} --display-name ${ENV_NAME};
 ```
 Note: 
 * restart the vs code, to select the venv as jupyter notebook kernel
@@ -161,33 +159,28 @@ Reference:
 * https://anbasile.github.io/posts/2017-06-25-jupyter-venv/
 
 ## Remove ipykernel
-```powershell
-$env:VERSION = "3.12";
-$env:PREFIX = "gpt";
-$env:ENV_NAME = "$env:PREFIX$env:VERSION";
-jupyter kernelspec uninstall -y $env:ENV_NAME
+```shell
+VERSION="3.12";
+PREFIX="gpt";
+FLAVOUR="wsl";
+ENV_NAME="${PREFIX}${VERSION}${FLAVOUR}";
+ENV_ROOT="/mnt/c/Users/yingdingwang/Documents/VENV";
+ENV_PATH="${ENV_ROOT}/${ENV_NAME}";
+source ${ENV_PATH}/bin/activate;
+
+which python;
+jupyter kernelspec uninstall -y ${ENV_NAME}
 ```
 
 ## (Optional) Remove all package from venv
-For the venv python
-```powershell
-which python
-python -m pip freeze | %{$_.split('==')} | %{python -m pip uninstall -y $_}
-python -m pip list
-```
-
-Note: `which` cmd can be installed from powershell with `winget install which`
-
-For the system python3
-```powershell
-which python3
-python3 -m pip freeze | %{$_.split('==')} | %{python3 -m pip uninstall -y $_}
+```shell 
+python3 -m pip freeze | xargs pip uninstall -y
 python3 -m pip list
 ```
 
 ## Issues
 
-### TqdmWarning: IProgress not found. Please update jupyter and ipywidgets
+### Warning: IProgress not found. Please update jupyter and ipywidgets
 ```
 pip install ipywidgets
 ```
