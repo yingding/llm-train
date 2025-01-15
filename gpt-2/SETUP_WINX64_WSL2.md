@@ -116,8 +116,17 @@ Note:
 
 ## Connect from native windows VS code to WSL venv
 
+1. Start VS code
+2. press `><` sign on the left bottom
+3. Choose WSL 
+4. Open Folder, show local to choose your local windows folder
+
+5. Create WSL workdir:
 ```shell
+mkdir -p $HOME/VCS/
 ```
+6. Create a Workdir in the WSL linux space, you can not use the windows workspace.
+7. Choose the python interpreter for the WSL linux version of VS code workspace
 
 Reference:
 * https://code.visualstudio.com/docs/remote/wsl
@@ -149,7 +158,7 @@ ENV_PATH="${ENV_ROOT}/${ENV_NAME}";
 source ${ENV_PATH}/bin/activate;
 
 which python;
-python -m ipykernel install --user --name=$env:ENV_NAME --display-name $env:ENV_NAME
+python -m ipykernel install --user --name=${ENV_NAME} --display-name ${ENV_NAME};
 ```
 Note: 
 * restart the vs code, to select the venv as jupyter notebook kernel
