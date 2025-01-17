@@ -50,7 +50,7 @@ $env:PREFIX = "gpt";
 $env:ENV_NAME = "$env:PREFIX$env:VERSION";
 $env:ENV_ROOT="$HOME\Documents\VENV";
 & "$env:ENV_ROOT\$env:ENV_NAME\Scripts\Activate.ps1";
-python -m ipykernel install --user --name=$env:ENV_NAME --display-name $env:ENV_NAME
+python -m ipykernel install --user --name=$env:ENV_NAME --display-name $env:ENV_NAME;
 ```
 Note: 
 * restart the vs code, to select the venv as jupyter notebook kernel
