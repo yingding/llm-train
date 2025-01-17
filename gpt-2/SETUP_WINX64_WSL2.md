@@ -161,7 +161,7 @@ source ${ENV_PATH}/bin/activate;
 
 which python;
 python -m pip install --upgrade pip;
-python -m pip install ipykernel;
+python -m pip install --no-cache-dir ipykernel;
 deactivate
 ```
 
