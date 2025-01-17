@@ -6,21 +6,17 @@ from torch.nn import functional as F
 
 from applyllm.accelerators import (
     AcceleratorHelper,
-    # DirectorySetting
 )
 import os
 
 
 # path for windows
-from win_patch import (
-    DirectorySetting,
+from patch.win_patch import (
     DIR_MODE_MAP
 )
 
 # TODO: rename the init_mps_torch to init_env_torch(dir_setting: DirectorySetting)
 AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP["win_local"])
-
-
 
 # ----------------------------
 """

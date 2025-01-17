@@ -3,5 +3,5 @@
 **/__pycache__/
 **/cache/
 condaenv**.requirements.txt
-
+nc_workspace/
 
