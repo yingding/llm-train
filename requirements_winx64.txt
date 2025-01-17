@@ -33,3 +33,5 @@ intel-npu-acceleration-library==1.4.0
 # the intel win package are compiled with nmpy 1.xx
 
 numpy<=1.26.4
+# inference engine
+openvino==2024.6.0

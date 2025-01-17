@@ -11,8 +11,16 @@ this will create a native python3.12 venv, install the python notebook kernel.
 
 In the activated python venv from powsershell install all the dependency:
 ```powershell
+$env:VERSION = "3.12";
+$env:ENV_NAME="gpt";
+$env:ENV_SURFIX="";
+$env:ENV_NAME_GEN = "$env:ENV_NAME$env:VERSION$env:ENV_SURFIX";
+$env:ENV_ROOT="$HOME\Documents\VENV";
+& "$env:ENV_ROOT\$env:ENV_NAME_GEN\Scripts\Activate.ps1";
+
 cd "C:\Users\yingdingwang\Documents\VCS\llm-train";
-python -m pip install --no-cache-dir -r ./requirements_winx64.txt;
+python -m pip install -r ./requirements_winx64.txt;
+# python -m pip install --no-cache-dir -r ./requirements_winx64.txt;
 ```
 this will take a while.
 

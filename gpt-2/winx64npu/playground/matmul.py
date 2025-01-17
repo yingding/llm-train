@@ -42,6 +42,5 @@ if __name__ == "__main__":
     config = MatMulConfig(128, 128, 32)
     # run the npu matmul
     print(config.run_npu_matmul())
-    print("="*10)
     # run the cpu matmul
     print(config.run_cpu_matmul())
