@@ -117,11 +117,18 @@ cd ${PROJ_PATH};
 
 which python;
 python -m pip install --no-cache-dir -r ./requirements_winx64_wsl.txt;
+# DISPLAY= python -m pip install --no-cache-dir -r ./requirements_winx64_wsl.txt;
 ```
 Note:
 * use `python` instead of `python3`, since it is linked to wrong python SDK 
 * encounter run issue, use `Set-ExecutionPolicy RemoteSigned` as admin to set the run privilege from powershell7 and restart powershell session.
+* it takes a long time to install all the packages
 
+<!-- 
+Reference:
+* WSL2 connect to xserver, use `DISPLAY= <cmd>` to tell not to connect to xserver
+* https://github.com/microsoft/WSL/issues/6643#issuecomment-1033864007
+--> 
 
 ## Connect from native windows VS code to WSL venv
 
