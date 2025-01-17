@@ -216,3 +216,9 @@ pip install ipywidgets
 which will update the ipywidgets and also the widgetsnbextension.
 
 * https://stackoverflow.com/questions/53247985/tqdm-4-28-1-in-jupyter-notebook-intprogress-not-found-please-update-jupyter-an
+
+### Install intel npu acceleration library in WSL2
+
+need `cmake`, ``c++ compile`
+
+* https://github.com/intel/intel-npu-acceleration-library
