@@ -56,10 +56,11 @@ sudo apt install -y python3.12 python3.12-venv
 
 ## Install cmake
 ```
-sudo apt install -y cmake build-essential
+sudo apt install -y cmake build-essential libtbb-dev
 ```
 this will be used to compile the intel lib in ubuntu
 
+* Reference: https://github.com/intel/intel-npu-acceleration-library/issues/13#issuecomment-2147679352
 <!--
 ## Install python3.11 on WSL2
 Add universal repository
@@ -229,3 +230,6 @@ which will update the ipywidgets and also the widgetsnbextension.
 need `cmake`, ``c++ compile`
 
 * https://github.com/intel/intel-npu-acceleration-library
+
+intel npu acceleration library is not working in WSL2, there is no npu driver for WSL2
+https://github.com/intel/intel-npu-acceleration-library/issues/13#issuecomment-2150497424

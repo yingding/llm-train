@@ -18,3 +18,9 @@ gpt3.12
 gpt3.12conda
 ```
 
+## Examples
+
+* https://github.com/intel/intel-npu-acceleration-library/issues/108#issuecomment-2463827536
+
+
+
