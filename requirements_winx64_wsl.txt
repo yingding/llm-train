@@ -1,7 +1,8 @@
 ipywidgets==8.1.5
 applyllm==0.0.7
 
-transformers==4.47.1
+# transformers==4.47.1
+transformers==4.48.0
 
 matplotlib==3.10.0
 tiktoken==0.8.0
@@ -20,7 +21,7 @@ typing-extensions==4.12.2
 
 # The NPU is only for Windows Native environment, not in WSL
 # https://github.com/intel/intel-npu-acceleration-library/issues/13
-# intel-npu-acceleration-library==1.4.0
+intel-npu-acceleration-library==1.4.0
 
 # examples with torch
 # https://github.com/intel/intel-npu-acceleration-library/blob/main/examples/train_mnist.py
@@ -32,4 +33,4 @@ typing-extensions==4.12.2
 # intel-extension-for-pytorch==2.5.10+xpu
 # the intel win package are compiled with nmpy 1.xx
 
-numpy<=1.26.4
+# numpy<=1.26.4

@@ -54,6 +54,12 @@ Python3.12
 sudo apt install -y python3.12 python3.12-venv
 ```
 
+## Install cmake
+```
+sudo apt install -y cmake build-essential
+```
+this will be used to compile the intel lib in ubuntu
+
 <!--
 ## Install python3.11 on WSL2
 Add universal repository
