@@ -10,6 +10,11 @@ library
 ## NPU environment
 
 Native window python3.12 venv:
-```
+```text
+## the linux package is only for ubuntu
+gpt3.12wsl
+## does the windows package actually work?
 gpt3.12
+gpt3.12conda
 ```
+
