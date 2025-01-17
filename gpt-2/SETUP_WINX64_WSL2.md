@@ -226,6 +226,7 @@ which will update the ipywidgets and also the widgetsnbextension.
 * https://stackoverflow.com/questions/53247985/tqdm-4-28-1-in-jupyter-notebook-intprogress-not-found-please-update-jupyter-an
 
 ### Install intel npu acceleration library in WSL2
+The driver and kernel is not available on WSL2
 
 need `cmake`, ``c++ compile`
 
