@@ -6,7 +6,6 @@ from dataclasses import dataclass
 
 # @time_func
 # def run_npu_matmul(inC, outC, batch):
-
 #     # Create both inputs
 #     X1 = np.random.uniform(-1, 1, (batch, inC)).astype(np.float16)
 #     X2 = np.random.uniform(-1, 1, (outC, inC)).astype(np.float16)
