@@ -1,3 +1,20 @@
+from applyllm.accelerators import (
+    AcceleratorHelper, 
+)
+import os, sys
+
+# import windows patch module from the repository to the sys path
+# relatively from the current file location
+patch_module_path = os.path.join(os.path.dirname(__file__), "../")
+sys.path.append(patch_module_path)
+
+# path for windows
+from patch.win_patch import (
+    DIR_MODE_MAP
+)
+# TODO: rename the init_mps_torch to init_env_torch(dir_setting: DirectorySetting)
+AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP["win_local"])
+
 import math
 import inspect
 from dataclasses import dataclass
@@ -10,20 +27,6 @@ from intel_npu_acceleration_library import compile
 from intel_npu_acceleration_library.compiler import CompilerConfig
 # https://github.com/intel/intel-npu-acceleration-library
 
-
-from applyllm.accelerators import (
-    AcceleratorHelper, 
-    # DIR_MODE_MAP
-)
-import os, sys
-
-# path for windows
-from win_patch import (
-    DirectorySetting,
-    DIR_MODE_MAP
-)
-# TODO: rename the init_mps_torch to init_env_torch(dir_setting: DirectorySetting)
-AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP["win_local"])
 
 # ----------------------------
 """
@@ -356,6 +359,7 @@ print(f"using device: {device}")
 
 # set the random seed for reproducibility
 my_seed = 1337
+# for cpu and npu
 torch.manual_seed(my_seed)
 if torch.cuda.is_available():
     torch.cuda.manual_seed(my_seed)
@@ -397,8 +401,9 @@ torch.set_float32_matmul_precision('high')
 # in the original GPT-2, the vocab size is 50257, for mps we also see some small speed up even introduce more compute.
 model = GPT(GPTConfig(vocab_size=50304))
 # move the entire model to the accelerator, moving all the tensors to the GPU
-model.to(device)
-# logits, loss = model(x, y)
+if sys.platform != "win32":
+    model.to(device)
+
 
 # torch.compile
 if device == "cuda":
@@ -414,7 +419,7 @@ elif sys.platform == "win32":
     print(
         "Windows do not support torch.compile, fallback to intel_npu_acceleration_library.compile"
     )
-    compiler_conf = CompilerConfig()
+    compiler_conf = CompilerConfig(dtype=torch.float32, training=True)
     model = npu_lib.compile(model, compiler_conf)
 
 # elif device == "mps":
@@ -449,12 +454,16 @@ def get_lr(it):
 # optimizer = torch.optim.AdamW(model.parameters(), lr=6e-4, betas=(0.9, 0.95), eps=1e-8)
 optimizer = model.configure_optimizers(weight_decay=0.1, learning_rate=6e-4, device=device)
 
+print("starting training")
+print(f"device: {device}")
+
 for step in range(max_steps):
     t0 = time.time()
     # keep the batch on the cpu, to not waste GPU memory
     x, y = train_loader.next_batch()
     # move tensors to the device
-    x, y = x.to(device), y.to(device)
+    if sys.platform != "win32":
+        x, y = x.to(device), y.to(device)
 
     # Enables autocasting for the forward pass (model + loss)
     # with torch.autocast(device_type="cuda"):
@@ -467,8 +476,10 @@ for step in range(max_steps):
         optimizer.zero_grad()
         logits, loss = model(x, y)
     elif device == "npu":
-        logits, loss = model(x, y)
-        optimizer.zero_grad()
+        with torch.no_grad():
+            # optimizer.zero_grad()
+            logits, loss = model(x, y)
+            
     
 
 
@@ -489,8 +500,16 @@ for step in range(max_steps):
     elif device == "mps":
         torch.mps.synchronize()
     elif device == "npu":
+        pass
+        # sync the npu device with cpu 
+        # npu_lib.synchronize()
+        # npu_lib.enable_npu_device()
+
         # torch.npu.synchronize()
-        torch.xpu.synchronize()
+        # npu_lib.synchronize()
+        # torch.xpu.synchronize()
+    
+    # continue with cpu operations
     t1 = time.time()
     dt = (t1 - t0)*1000 # time difference in milliseconds
     # thoughput in tokens per second during the training, an objective metric
