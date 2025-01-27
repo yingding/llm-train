@@ -14,6 +14,7 @@ pydantic==2.8.2
 typing-extensions==4.12.2
 # bitsandbytes==0.43.3
 
+
 # intel npu extension for torch
 # for intel data center gpus 
 # https://github.com/intel/intel-extension-for-pytorch
@@ -21,7 +22,9 @@ typing-extensions==4.12.2
 
 # NPU for Intel Core Ultra Processor line
 # https://pypi.org/project/intel-npu-acceleration-library/
-intel-npu-acceleration-library==1.4.0
+# intel-npu-acceleration-library==1.4.0
+
+
 # examples with torch
 # https://github.com/intel/intel-npu-acceleration-library/blob/main/examples/train_mnist.py
 
@@ -32,4 +35,4 @@ intel-npu-acceleration-library==1.4.0
 # intel-extension-for-pytorch==2.5.10+xpu
 # the intel win package are compiled with nmpy 1.xx
 
-numpy<=1.26.4
+# numpy<=1.26.4
