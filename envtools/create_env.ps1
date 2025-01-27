@@ -50,28 +50,29 @@ if ($PM -notin $validPM) {
         # & "deactivate"
 
     } elseif ($PM -eq "conda") {
-        # if ($env:PY_VERSION -eq "3.11") {
-        #     # you need to install the miniconda 3.11 into the path $env:USERPROFILE\AppData\Local\miniconda311
-        #     $condaCmd = "$env:USERPROFILE\AppData\Local\miniconda311\Scripts\conda.exe";
-        # } elseif ($env:PY_VERSION -eq "3.12") {
-        #     $condaCmd = "$env:USERPROFILE\AppData\Local\miniconda312\Scripts\conda.exe";
-        # }
+        # C:\Users\yingdingwang\AppData\Local\miniconda3\Library\bin\conda.BAT
+        if ($env:PY_VERSION -eq "3.11") {
+            # you need to install the miniconda 3.11 into the path $env:USERPROFILE\AppData\Local\miniconda311
+            $condaCmd = "$env:USERPROFILE\AppData\Local\miniconda311\Scripts\conda.exe";
+        } elseif ($env:PY_VERSION -eq "3.12") {
+            $condaCmd = "$env:USERPROFILE\AppData\Local\miniconda312\Scripts\conda.exe";
+        }
  
         $previousLocation = Get-Location
         # create the virtual environment
         # & "conda" create --prefix "$env:ENV_ROOT" python="$env:PY_VERSION";
         # Start-Process $condaCmd -ArgumentList "create --prefix $env:ENV_ROOT python=$env:PY_VERSION -y" -Wait;
         
-        # Invoke-Expression "& $condaCmd create --prefix $env:ENV_ROOT python=$env:PY_VERSION -y";
-        Invoke-Expression "& conda create --prefix $env:ENV_ROOT python=$env:PY_VERSION -y";
+        Invoke-Expression "& $condaCmd create --prefix $env:ENV_ROOT python=$env:PY_VERSION -y";
+        # Invoke-Expression "& conda create --prefix $env:ENV_ROOT python=$env:PY_VERSION -y";
         
 
         # activate the virtual environment
         Set-Location -Path $env:ENV_ROOT;
         
         # Initialize conda for PowerShell
-        Invoke-Expression "& conda init powershell"
-        Invoke-Expression "& conda config --set auto_activate_base false"
+        Invoke-Expression "& $condaCmd init powershell"
+        Invoke-Expression "& $condaCmd config --set auto_activate_base false"
         # Invoke-Expression "& $condaCmd init powershell"
         # Invoke-Expression "& $condaCmd config --set auto_activate_base false"
 
@@ -84,7 +85,7 @@ if ($PM -notin $validPM) {
         
         Write-Host "$PM venv: $env:ENV_ROOT created successfully.";
 
-        Invoke-Expression "& conda env list";
+        Invoke-Expression "& $condaCmd env list";
         Invoke-Expression "& conda activate $env:ENV_ROOT";
 
         # pass the instruction which python to activated python virtual environment
