@@ -25,7 +25,7 @@ conda activate "$HOME\Documents\VENV\${env:ENV_NAME}";
 ```
 Note:
 * You need to add the specific conda version path to the user `Path` environment variable
-```
+```console
 C:\Users\yingdingwang\AppData\Local\miniconda3
 C:\Users\yingdingwang\AppData\Local\miniconda3\Scripts
 ```
