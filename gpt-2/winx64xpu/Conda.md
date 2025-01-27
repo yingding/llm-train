@@ -41,11 +41,28 @@ conda activate C:\Users\yingdingwang\Documents\VENV\gpt3.11winconda
 pip install --pre --upgrade ipex-llm[npu]
 
 set IPEX_LLM_NPU_MTL=1
+
+pip install -r requirements_winx64_conda.txt
 ```
 Note:
 * `set IPEX_LLM_NPU_MTL=1` for Intel Core™ Ultra Processors (Series 1) with processor number 1xxH (code name Meteor Lake)
 
 Reference:
 * https://github.com/intel/ipex-llm/blob/main/docs/mddocs/Quickstart/npu_quickstart.md
+
+## Run a model on NPU
+In Anaconda PowerShell Prompt
+```
+cd .\gpt-2\winx64npu\playground
+
+python ./generate.py --repo-id-or-model-path "meta-llama/Llama-2-7b-chat-hf" --save-directory "C:\Users\yingdingwang\MODELS\npu"
+
+python qwen.py --repo-id-or-model-path "Qwen/Qwen2-7B-Instruct"
+
+# python qwen.py --repo-id-or-model-path "Qwen/Qwen2-7B-Instruct" --save-directory "C:\Users\yingdingwang\MODELS\npu"
+```
+
+Reference:
+* https://github.com/intel/ipex-llm/tree/main/python/llm/example/NPU/HF-Transformers-AutoModels/LLM
 
 

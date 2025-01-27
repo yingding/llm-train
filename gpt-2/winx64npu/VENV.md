@@ -29,6 +29,9 @@ The NPU python lib (`intel-npu-acceleration-library==1.4.0`) works at the time o
 
 Run the notebook ``gpt-2\winx64npu\playground\matmul.ipynb` to test the npu.
 
+## Reference
+* ipex llm https://github.com/intel/ipex-llm/blob/main/docs/mddocs/Quickstart/npu_quickstart.md
+
 ## Issues
 * NPU example workaround https://github.com/intel/intel-npu-acceleration-library/issues/108#issuecomment-2463827536
 
