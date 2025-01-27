@@ -55,7 +55,11 @@ In Anaconda PowerShell Prompt
 ```
 cd .\gpt-2\winx64npu\playground
 
+python ./generate.py --repo-id-or-model-path "Qwen/Qwen2.5-72B-Instruct" --save-directory "C:\Users\yingdingwang\MODELS\npu"
+
 python ./generate.py --repo-id-or-model-path "meta-llama/Llama-2-7b-chat-hf" --save-directory "C:\Users\yingdingwang\MODELS\npu"
+
+Qwen/Qwen2.5-72B-Instruct
 
 python qwen.py --repo-id-or-model-path "Qwen/Qwen2-7B-Instruct"
 
@@ -63,6 +67,7 @@ python qwen.py --repo-id-or-model-path "Qwen/Qwen2-7B-Instruct"
 ```
 
 Reference:
+* https://github.com/intel/ipex-llm/tree/main/python/llm/example/NPU/HF-Transformers-AutoModels/Save-Load
 * https://github.com/intel/ipex-llm/tree/main/python/llm/example/NPU/HF-Transformers-AutoModels/LLM
 
 
