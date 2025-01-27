@@ -8,6 +8,7 @@ conda deactivate
 ```
 
 Create a conda python 3.11 venv
+from an Anaconda powershell prompt, not a powershell prompt.
 ```powershell
 $env:VERSION="3.11";
 $env:ENV_NAME="gpt";
