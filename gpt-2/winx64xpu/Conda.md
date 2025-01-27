@@ -55,7 +55,7 @@ In Anaconda PowerShell Prompt
 ```
 cd .\gpt-2\winx64npu\playground
 
-python ./generate.py --repo-id-or-model-path "Qwen/Qwen2.5-72B-Instruct" --save-directory "C:\Users\yingdingwang\MODELS\npu"
+python ./generate.py --repo-id-or-model-path "Qwen/Qwen2.5-1.5B" --save-directory "C:\Users\yingdingwang\MODELS\npu"
 
 python ./generate.py --repo-id-or-model-path "meta-llama/Llama-2-7b-chat-hf" --save-directory "C:\Users\yingdingwang\MODELS\npu"
 
