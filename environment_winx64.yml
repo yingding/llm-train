@@ -5,6 +5,8 @@ channels:
   - https://repo.anaconda.com/pkgs/main
   - https://repo.anaconda.com/pkgs/r
   - https://repo.anaconda.com/pkgs/msys2
+# use libuv==1.39 for windows
+# acording to the torch page https://pypi.org/project/torch/
 dependencies:
 - python==3.12
 - libuv==1.48.0

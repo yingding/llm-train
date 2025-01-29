@@ -49,8 +49,11 @@ conda env update --prefix "$HOME\Documents\VENV\${env:ENV_NAME}" --file environm
 # which pip
 which pip
 
-# install additional pip packages
+# install additional pip packages from storage 0 (us storage is fast in eu)
 python -m pip install torch==2.5.1+cxx11.abi torchvision==0.20.1+cxx11.abi torchaudio==2.5.1+cxx11.abi intel-extension-for-pytorch==2.5.10+xpu --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/mtl/us/
+
+# install additional pip packages from storage 1
+python -m pip install torch==2.5.1+cxx11.abi torchvision==0.20.1+cxx11.abi torchaudio==2.5.1+cxx11.abi intel-extension-for-pytorch==2.5.10+xpu --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/mtl/cn/
 ```
 
 ## Environment
