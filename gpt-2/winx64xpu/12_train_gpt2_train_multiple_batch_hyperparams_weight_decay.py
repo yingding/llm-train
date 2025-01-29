@@ -454,6 +454,9 @@ if device == "cuda":
     # keep the data in the GPU chip memory instead of offloading
     # to the HBM (high bandwidth memory) aka global state of the GPU
     model = torch.compile(model)
+elif device == "mps":
+    # https://discuss.pytorch.org/t/jitting-fails-on-mps-device/192079
+    model = torch.compile(model, backend="aot_eager")
 elif device == "xpu":
     # dtype bfloat16, float16, float32
     # https://intel.github.io/intel-extension-for-pytorch/xpu/latest/tutorials/getting_started.html
