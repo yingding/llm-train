@@ -1,19 +1,17 @@
+from applyllm.accelerators import (
+    AcceleratorHelper, DIR_MODE_MAP
+)
+# set up the torch mps environment and huggingface cache home, before importing datasets and transformers
+AcceleratorHelper.init_torch_env(accelerator="mps", dir_setting=DIR_MODE_MAP.get("mac_local"))
+
 import math
 import inspect
 from dataclasses import dataclass
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-
-from applyllm.accelerators import (
-    AcceleratorHelper, DIR_MODE_MAP
-)
 import os
 
-# set up the torch mps environment and huggingface cache home, before importing datasets and transformers
-AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP.get("mac_local"))
-
-# ----------------------------
 """
 https://github.com/karpathy/build-nanogpt/blob/master/train_gpt2.py
 """
@@ -350,7 +348,7 @@ elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
 # device = "cpu" # override 
 # get the current file parent directory
 parent_dir = os.path.dirname(__file__)
-training_data_path = os.path.join(parent_dir, "data/input.txt")
+training_data_path = os.path.join(parent_dir, "data", "input.txt")
 
 
 # train_loader = DataLoaderLite(B=4, T=32, data_path=training_data_path)
@@ -385,11 +383,9 @@ if device == "cuda":
     # keep the data in the GPU chip memory instead of offloading
     # to the HBM (high bandwidth memory) aka global state of the GPU
     model = torch.compile(model)
-# elif device == "mps":
-#     # https://discuss.pytorch.org/t/jitting-fails-on-mps-device/192079
-#     # model = torch.compile(model, backend="aot_eager")
-#     model = torch.compile(model, backend="aot_eager")
-#     model.to(device)
+elif device == "mps":
+    # https://discuss.pytorch.org/t/jitting-fails-on-mps-device/192079
+    model = torch.compile(model, backend="aot_eager")
 
 # max_lr = 3e-4
 max_lr = 6e-4 # 6.0 x 10^-4
