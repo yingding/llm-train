@@ -1,11 +1,29 @@
+from applyllm.accelerators import (
+    AcceleratorHelper,
+    DIR_MODE_MAP,
+)
+AcceleratorHelper.init_torch_env(accelerator="xpu", dir_setting=DIR_MODE_MAP["win_local"])
+
 import math
 import inspect
 from dataclasses import dataclass
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-
 import intel_extension_for_pytorch as ipex
+import os, sys
+
+def print_xpu_info():
+    print(torch.__version__)
+    print(ipex.__version__)
+    [print(f'[{i}]: {torch.xpu.get_device_properties(i)}') for i in range(torch.xpu.device_count())]
+    # xpus = [f'[{i}]: {torch.xpu.get_device_properties(i)}' for i in range(torch.xpu.device_count())]
+    # [print(xpu) for xpu in xpus]
+
+
+print_xpu_info()
+
+
 # XPU/GPU and NPU doesn't work together using torch
 # import intel_npu_acceleration_library
 
@@ -18,19 +36,6 @@ import intel_extension_for_pytorch as ipex
 # # https://github.com/intel/intel-npu-acceleration-library
 
 
-from applyllm.accelerators import (
-    AcceleratorHelper, 
-    # DIR_MODE_MAP
-)
-import os, sys
-
-# path for windows
-from win_patch import (
-    DirectorySetting,
-    DIR_MODE_MAP
-)
-# TODO: rename the init_mps_torch to init_env_torch(dir_setting: DirectorySetting)
-AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP["win_local"])
 
 # ----------------------------
 """
@@ -356,9 +361,10 @@ if torch.cuda.is_available():
     device = "cuda"
 elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
     device = "mps"
-elif sys.platform == "win32":
+elif sys.platform == "win32" and torch.xpu.device_count() > 0:
     # Windows do not support torch.compile 
     device = "xpu"
+    print_xpu_info()
 print(f"using device: {device}")
 
 # set the random seed for reproducibility
@@ -368,6 +374,8 @@ if torch.cuda.is_available():
     torch.cuda.manual_seed(my_seed)
 elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
     torch.mps.manual_seed(my_seed)
+elif sys.platform == "win32" and torch.xpu.device_count() > 0:
+    torch.xpu.manual_seed(my_seed)
 
 # device = "cpu" # override 
 # get the current file parent directory
@@ -446,13 +454,10 @@ if device == "cuda":
     # keep the data in the GPU chip memory instead of offloading
     # to the HBM (high bandwidth memory) aka global state of the GPU
     model = torch.compile(model)
-elif sys.platform == "win32":
-    # example code 
-    device = "xpu"
+elif device == "xpu":
+    # dtype bfloat16, float16, float32
     # https://intel.github.io/intel-extension-for-pytorch/xpu/latest/tutorials/getting_started.html
-    # model, optimizer = ipex.optimize(model, optimizer=optimizer, dtype=torch.float32)
-    # for float32
-    model, optimizer = ipex.optimize(model, optimizer=optimizer)
+    model, optimizer = ipex.optimize(model, optimizer=optimizer, dtype=torch.bfloat16)
 
 for step in range(max_steps):
     t0 = time.time()
@@ -468,13 +473,17 @@ for step in range(max_steps):
             # start with a zero gradient
             optimizer.zero_grad()
             logits, loss = model(x, y)
-    elif device == "mps" or device == "xpu":
+    elif device == "mps":
         optimizer.zero_grad()
         logits, loss = model(x, y)
-    elif device == "npu":
-        optimizer.zero_grad()
-        logits, loss = model(x, y)
-     
+    elif device == "xpu":
+        # with torch.xpu.amp.autocast(enabled=True, dtype=torch.bfloat16, cache_enabled=False):
+        with torch.amp.autocast(device_type="xpu", dtype=torch.bfloat16, cache_enabled=False):
+            optimizer.zero_grad()
+            logits, loss = model(x, y)
+        # with torch.autocast(device_type="xpu", dtype=torch.bfloat16):
+        #     optimizer.zero_grad()
+        #     logits, loss = model(x, y)  
 
     # Exits the context manager before backward()
     # adds the loss to gradients

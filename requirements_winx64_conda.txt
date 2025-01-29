@@ -1,6 +1,6 @@
 # ipywidgets==8.1.3
 ipywidgets==8.1.5
-applyllm==0.0.8
+applyllm==0.0.8.post1
 
 # transformers==4.47.1
 # accelerate==0.33.0
