@@ -35,10 +35,21 @@ $env:PM="conda";
 .\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
 ```
 
+Python 3.12 venv
+```Anaconda Powershell Prompt
+$env:VERSION="3.12";
+$env:ENV_NAME="directml";
+$env:ENV_SURFIX="winconda";
+$env:PM="conda";
+.\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
+```
+
 ## Install XPU with intel-extension-for-pytorch
 
+Training framework
+
 xpu
-```powershell
+```Anaconda Powershell
 $env:VERSION = "3.12";
 $env:ENV_NAME = "gpt${env:VERSION}winconda";
 conda activate "$HOME\Documents\VENV\${env:ENV_NAME}";
@@ -56,7 +67,24 @@ python -m pip install torch==2.5.1+cxx11.abi torchvision==0.20.1+cxx11.abi torch
 python -m pip install torch==2.5.1+cxx11.abi torchvision==0.20.1+cxx11.abi torchaudio==2.5.1+cxx11.abi intel-extension-for-pytorch==2.5.10+xpu --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/mtl/cn/
 ```
 
+## Install NPU with directml
+```Anaconda Powershell
+$env:VERSION = "3.12";
+$env:ENV_NAME = "directml${env:VERSION}winconda";
+conda activate "$HOME\Documents\VENV\${env:ENV_NAME}";
+
+# path env
+conda env update --prefix "$HOME\Documents\VENV\${env:ENV_NAME}" --file environment_winx64.yml
+
+# which pip
+which pip
+
+pip install torch-directml==0.2.5.dev240914
+```
+pytorch with directml, directml with onnx runtime on intel npu
+
+
 ## Environment
 
-* gpt3.11winconda: native windows python 3.11 conda env with (ipex-llm[npu])
+* gpt3.11winconda: native windows python 3.11 conda env with (ipex-llm[npu]): ipex-llm is inference and serving only.
 * gpt3.12winconda: native windows python 3.12 conda env with intel-extension-for-pytorch (xpu, gpu)
