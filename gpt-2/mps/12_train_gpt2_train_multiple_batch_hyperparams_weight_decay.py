@@ -373,17 +373,24 @@ torch.set_float32_matmul_precision('high')
 # additional tokens doesn't break the model, but helps cuda to have fast computation.
 # in the original GPT-2, the vocab size is 50257, for mps we also see some small speed up even introduce more compute.
 model = GPT(GPTConfig(vocab_size=50304))
+
+
 # move the entire model to the accelerator, moving all the tensors to the GPU
 model.to(device)
+
 # logits, loss = model(x, y)
 
 # torch.compile
 if device == "cuda":
+    # torch.cuda.memory._record_memory_history(max_entries=10000)
+    # model.to(device)
     # https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html
     # keep the data in the GPU chip memory instead of offloading
     # to the HBM (high bandwidth memory) aka global state of the GPU
     model = torch.compile(model)
 elif device == "mps":
+    # mps
+    # model.to(device)
     # https://discuss.pytorch.org/t/jitting-fails-on-mps-device/192079
     model = torch.compile(model, backend="aot_eager")
 
@@ -469,6 +476,13 @@ for step in range(max_steps):
 del model
 import gc 
 gc.collect()
-torch.mps.empty_cache()
+if device == "cuda":
+    # torch.cuda.memory._dump_snapshot("../data/cuda_memory_snapshot.pkl")
+    # torch.cuda.memory._record_memory_history(enabled=None)
+    # Analyze the memory usage profile/snapshot.pkl file with PyTorch memory visualizer
+    # https://pytorch.org/docs/stable/torch_cuda_memory.html
+    torch.cuda.empty_cache()
+elif device == "mps":
+    torch.mps.empty_cache()
 
 import sys; sys.exit(0)
