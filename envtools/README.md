@@ -79,7 +79,10 @@ conda env update --prefix "$HOME\Documents\VENV\${env:ENV_NAME}" --file environm
 # which pip
 which pip
 
+# depends on torch 2.4.1, only gpu
 pip install torch-directml==0.2.5.dev240914
+
+pip install intel-npu-acceleration-library==1.4.0
 ```
 pytorch with directml, directml with onnx runtime on intel npu
 
@@ -88,3 +91,8 @@ pytorch with directml, directml with onnx runtime on intel npu
 
 * gpt3.11winconda: native windows python 3.11 conda env with (ipex-llm[npu]): ipex-llm is inference and serving only.
 * gpt3.12winconda: native windows python 3.12 conda env with intel-extension-for-pytorch (xpu, gpu)
+
+## Inference FrameWork
+both ipex-llm, intel-npu-acceleration-library are inference framework
+
+both intel-extension-for-pytorch, directml with onnex are the training time framework

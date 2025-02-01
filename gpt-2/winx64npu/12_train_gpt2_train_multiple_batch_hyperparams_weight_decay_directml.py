@@ -1,6 +1,6 @@
 from applyllm.accelerators import (
-    AcceleratorHelper,
-    DIR_MODE_MAP, 
+    AcceleratorHelper, 
+    DIR_MODE_MAP,
 )
 AcceleratorHelper.init_torch_env(accelerator="npu", dir_setting=DIR_MODE_MAP["win_local"])
 
@@ -10,16 +10,14 @@ from dataclasses import dataclass
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
+import torch_directml
 import os, sys
 
-import intel_npu_acceleration_library as npu_lib
-from intel_npu_acceleration_library import compile
-from intel_npu_acceleration_library.compiler import CompilerConfig
-# https://github.com/intel/intel-npu-acceleration-library
+def print_npu_info():
+    print(torch.__version__)
+    torch_directml.device_count()
+    [print(f'[{i}]: {torch_directml.device_name(i)}') for i in range(torch_directml.device_count())]
 
-# def print_npu_info():
-#     print(torch.__version__)
-#     print(npu_lib.device_count())
 
 # ----------------------------
 """
@@ -339,8 +337,8 @@ class DataLoaderLite:
 # ----------------------------
 # attempt to autodetect the device
 
-# print_npu_info()
-# sys.exit(0)
+print_npu_info()
+sys.exit(0)
 
 import time 
 device = "cpu"
@@ -397,8 +395,8 @@ torch.set_float32_matmul_precision('high')
 # in the original GPT-2, the vocab size is 50257, for mps we also see some small speed up even introduce more compute.
 model = GPT(GPTConfig(vocab_size=50304))
 # move the entire model to the accelerator, moving all the tensors to the GPU
-# if sys.platform != "win32":
-model.to(device)
+if sys.platform != "win32":
+    model.to(device)
 
 
 # torch.compile
@@ -417,7 +415,6 @@ elif sys.platform == "win32":
     )
     compiler_conf = CompilerConfig(dtype=torch.float32, training=True)
     model = npu_lib.compile(model, compiler_conf)
-    # model = torch.compile(model)
 
 # elif device == "mps":
 #     # https://discuss.pytorch.org/t/jitting-fails-on-mps-device/192079
@@ -459,8 +456,8 @@ for step in range(max_steps):
     # keep the batch on the cpu, to not waste GPU memory
     x, y = train_loader.next_batch()
     # move tensors to the device
-    # if sys.platform != "win32":
-    x, y = x.to(device), y.to(device)
+    if sys.platform != "win32":
+        x, y = x.to(device), y.to(device)
 
     # Enables autocasting for the forward pass (model + loss)
     # with torch.autocast(device_type="cuda"):
@@ -473,10 +470,13 @@ for step in range(max_steps):
         optimizer.zero_grad()
         logits, loss = model(x, y)
     elif device == "npu":
-        # with torch.autocast(device_type="npu", dtype=torch.float16):
-        optimizer.zero_grad()
-        logits, loss = model(x, y)
+        with torch.no_grad():
+            # optimizer.zero_grad()
+            logits, loss = model(x, y)
             
+    
+
+
     # Exits the context manager before backward()
     # adds the loss to gradients
     loss.backward()
@@ -494,12 +494,7 @@ for step in range(max_steps):
     elif device == "mps":
         torch.mps.synchronize()
     elif device == "npu":
-        # intel_npu_acceleration_library.synchronize()
-        
-        pass 
-        # torch.amp.synchronize()
-        # torch.cpu.synchronize()
-        # pass
+        pass
         # sync the npu device with cpu 
         # npu_lib.synchronize()
         # npu_lib.enable_npu_device()
