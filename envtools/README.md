@@ -15,6 +15,17 @@ $env:PM="pip";
 ```
 
 
+```powershell
+cd $env:USERPROFILE\Documents\VCS\llm-train;
+
+$env:VERSION="3.12";
+$env:ENV_NAME="dbs";
+$env:ENV_SURFIX="";
+$env:PM="pip";
+.\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
+```
+
+
 ## Create a windows native python venv using miniconda
 
 Python 3.11 venv
