@@ -43,7 +43,8 @@ if ($PM -notin $validPM) {
         # activate the virtual environment
         & "$env:ENV_ROOT\Scripts\Activate.ps1";
         # pass the instruction "which python" to activated python virtual environment
-        & "which" python;
+        # replace & "which" python; since the which is not available in Windows
+        Invoke-Expression "(Get-Command python).Source";
         & "python" -m pip install --upgrade pip;
         & "python" -m pip install ipykernel;
         & "python" -m ipykernel install --user --name=$env:ENV_FULL_NAME --display-name $env:ENV_FULL_NAME;
