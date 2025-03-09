@@ -2,17 +2,20 @@
 This repository contains code of [applyllm](https://pypi.org/project/applyllm/) python PyPI package, for loading and training open source llm models e.g. LlaMA2, Mixtral 8x7B, etc.
 
 ## Creat VENV
-use the `create_env.sh` script to create a venv on macosx
+use the `create_env.sh` script to create a venv on windows 11
 
 ```powershell
-$env:VERSION = "3.12";
-$env:PREFIX = "gpt";
-$env:ENV_NAME = "$env:PREFIX$env:VERSION";
-$env:ENV_ROOT="$HOME\Documents\VENV";
-# source ./envtools/create_env.sh -p ${ENV_ROOT}/${ENV_NAME} -v $VERSION
+cd $env:USERPROFILE\Documents\VCS\llm-train;
+
+$VERSION="3.12";
+$ENV_NAME="gpt";
+$ENV_SURFIX="pip";
+$PM="pip";
+$WORK_DIR="$env:USERPROFILE\Documents\VENV\";
+.\envtools\create_env.ps1 -VERSION $VERSION -ENV_NAME $ENV_NAME -ENV_SURFIX $ENV_SURFIX -PM $PM -WORK_DIR $WORK_DIR;
 ```
 
-## Setup a local venv on Macosx Apple Silicon
+## (optional) Manually setup a local venv on windows 11
 ```powershell
 $env:VERSION = "3.12";
 $env:PREFIX = "gpt";
@@ -31,7 +34,7 @@ Note:
 * use `python` instead of `python3`, since it is linked to wrong python SDK 
 * encounter run issue, use `Set-ExecutionPolicy RemoteSigned` as admin to set the run privilege from powershell7 and restart powershell session.
 
-## Add a jupyter notebook kernel to VENV
+## (optional) Add a jupyter notebook kernel to VENV
 ```powershell
 $env:VERSION = "3.12";
 $env:PREFIX = "gpt";
