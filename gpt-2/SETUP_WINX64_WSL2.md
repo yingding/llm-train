@@ -1,7 +1,7 @@
 # gpt-2: python package
 This repository contains code of [applyllm](https://pypi.org/project/applyllm/) python PyPI package, for loading and training open source llm models e.g. LlaMA2, Mixtral 8x7B, etc.
 
-## Activate WSL2 on windows 11
+## Activate WSL2 on windows 11 (Not working with NPU)
 
 Install WSL from powershell with
 ```powershell
