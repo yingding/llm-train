@@ -13,7 +13,7 @@ if ($VERSION -eq "" -or $ENV_NAME -eq "") {
 }
 
 # Validate the $VERSION parameter
-$validVersions = @("3.11", "3.12")
+$validVersions = @("3.11", "3.12", "3.13")
 if ($VERSION -notin $validVersions) {
     Write-Error "Invalid VERSION '$VERSION'. Valid actions are: $($validVersions -join ', ')."
     exit 1
