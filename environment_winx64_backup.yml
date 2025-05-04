@@ -22,8 +22,10 @@ dependencies:
   - torch==2.7.0
   - torchvision==0.22.0
   - torchaudio==2.7.0
-  - intel-extension-for-pytorch==2.7.10+xpu
   - --index-url https://download.pytorch.org/whl/xpu
+- pip:
+  - intel-extension-for-pytorch==2.7.10+xpu
   - --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us/
+- pip: # handle fallback
   - -r requirements_winx64_conda.txt
-  - --extra-index-url https://pypi.org/simple
+  # - --extra-index-url https://pypi.org/simple
