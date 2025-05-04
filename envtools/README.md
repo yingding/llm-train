@@ -39,6 +39,8 @@ $env:PM="conda";
 
 Python 3.12 venv
 ```Anaconda Powershell Prompt
+cd $env:USERPROFILE\Documents\VCS\llm-train;
+
 $env:VERSION="3.12";
 $env:ENV_NAME="gpt";
 $env:ENV_SURFIX="winconda";
@@ -71,14 +73,18 @@ conda env update --prefix "$HOME\Documents\VENV\${env:ENV_NAME}" --file environm
 # which pip
 which pip
 
-# install additional pip packages from storage 0 (us storage is fast in eu)
-python -m pip install torch==2.5.1+cxx11.abi torchvision==0.20.1+cxx11.abi torchaudio==2.5.1+cxx11.abi intel-extension-for-pytorch==2.5.10+xpu --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/mtl/us/
-
-# install additional pip packages from storage 1
-python -m pip install torch==2.5.1+cxx11.abi torchvision==0.20.1+cxx11.abi torchaudio==2.5.1+cxx11.abi intel-extension-for-pytorch==2.5.10+xpu --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/mtl/cn/
+# the torch and intel-extension are now installed with environment_winx64.yml file
+# install python2.7 additional pip packages from storage 0 (us storage is fast in eu)
+# python -m pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/xpu
+python -m pip install intel-extension-for-pytorch==2.7.10+xpu --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us/
 ```
 Reference:
 * https://intel.github.io/intel-extension-for-pytorch/
+
+Sanity Test
+```Anaconda Powershell
+python -c "import torch; import intel_extension_for_pytorch as ipex; print(torch.__version__); print(ipex.__version__); [print(f'[{i}]: {torch.xpu.get_device_properties(i)}') for i in range(torch.xpu.device_count())];"
+```
 
 ## Install NPU with directml
 ```Anaconda Powershell
