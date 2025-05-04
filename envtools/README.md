@@ -68,6 +68,7 @@ $env:ENV_NAME = "gpt${env:VERSION}winconda";
 conda activate "$HOME\Documents\VENV\${env:ENV_NAME}";
 
 # path env
+cd $env:USERPROFILE\Documents\VCS\llm-train;
 conda env update --prefix "$HOME\Documents\VENV\${env:ENV_NAME}" --file environment_winx64.yml
 
 # which pip
