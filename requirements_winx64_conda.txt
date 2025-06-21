@@ -11,7 +11,7 @@ pydantic>=2.8.2
 # pydantic==2.11.4
 # typing guard back port to 3.8 
 typing-extensions==4.14.0
-bitsandbytes==0.46.0
+# bitsandbytes==0.46.0
 
 
 # intel npu extension for torch
