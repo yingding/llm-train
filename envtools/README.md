@@ -57,6 +57,33 @@ $env:PM="conda";
 .\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
 ```
 
+## Create and install intel-extension (final one)
+Create VENV
+```Anaconda Powershell
+cd $env:USERPROFILE\Documents\VCS\llm-train;
+
+$env:VERSION="3.12";
+$env:ENV_NAME="gpt";
+$env:ENV_SURFIX="winconda";
+$env:PM="conda";
+.\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
+```
+
+Install the Intell extension
+```Anaconda Powershell
+$env:VERSION = "3.12";
+$env:ENV_NAME = "gpt${env:VERSION}winconda";
+conda activate "$HOME\Documents\VENV\${env:ENV_NAME}";
+
+# path env
+cd $env:USERPROFILE\Documents\VCS\llm-train;
+conda env update --prefix "$HOME\Documents\VENV\${env:ENV_NAME}" --file environment_winx64.yml
+
+# which pip
+which pip
+```
+
+
 ## Install XPU with intel-extension-for-pytorch
 
 Training framework
