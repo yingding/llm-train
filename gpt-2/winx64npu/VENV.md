@@ -35,6 +35,9 @@ Run the notebook ``gpt-2\winx64npu\playground\matmul.ipynb` to test the npu.
 ## Issues
 * NPU example workaround https://github.com/intel/intel-npu-acceleration-library/issues/108#issuecomment-2463827536
 
+* OpenVino NPU example https://github.com/alessandropalla/intel_npu_openvino_examples?tab=readme-ov-file
+
+
 
 
 
