@@ -19,7 +19,9 @@ if ($VERSION -notin $validVersions) {
     exit 1
 } 
 
-$validPM = @("pip", "conda")
+# powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+# uv venv azfdymcp3.12uv --python python3.12
+$validPM = @("pip", "conda", "uv")
 if ($PM -notin $validPM) {
     Write-Error "Invalid PM (package manager) '$PM'. Valid actions are: $($validPM -join ', ')."
     exit 1
@@ -50,6 +52,26 @@ if ($PM -notin $validPM) {
         & "python" -m ipykernel install --user --name=$env:ENV_FULL_NAME --display-name $env:ENV_FULL_NAME;
         # & "deactivate"
 
+    } elseif ($PM -eq "uv") {
+        # create the virtual environment using uv
+        # uv venv $env:ENV_FULL_NAME --python python$env:PY_VERSION;
+        # uv venv $env:ENV_FULL_NAME --python python$env:PY_VERSION --work-dir $WORK_DIR;
+        # uv venv $env:ENV_FULL_NAME --python python$env:PY_VERSION --work-dir $WORK_DIR --force;
+        & "uv" venv "$env:ENV_ROOT" --python python$env:PY_VERSION;
+        
+        # activate the virtual environment
+        & "$env:ENV_ROOT\Scripts\Activate.ps1";
+        
+        # pass the instruction which python to activated python virtual environment
+        Invoke-Expression "(Get-Command python).Source";
+        
+        # & "uv" pip install --upgrade pip;
+        & "uv" pip install ipykernel;
+        & "python" -m ipykernel install --user --name=$env:ENV_FULL_NAME --display-name $env:ENV_FULL_NAME;
+        # & "python" -m pip install --upgrade pip;
+        # & "python" -m pip install ipykernel;
+        # & "python" -m ipykernel install --user --name=$env:ENV_FULL_NAME --display-name $env:ENV_FULL_NAME;
+    
     } elseif ($PM -eq "conda") {
         # C:\Users\yingdingwang\AppData\Local\miniconda3\Library\bin\conda.BAT
         # if ($env:PY_VERSION -eq "3.11") {
