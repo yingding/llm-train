@@ -30,14 +30,13 @@ $env:PM="pip";
 
 Python 3.11 venv
 ```Anaconda Powershell Prompt
+cd $env:USERPROFILE\Documents\VCS\llm-train;
 $env:VERSION="3.11";
 $env:ENV_NAME="gpt";
 $env:ENV_SURFIX="winconda";
 $env:PM="conda";
 .\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
 ```
-
-## Install miniconda in local 
 
 Python 3.12 venv
 ```Anaconda Powershell Prompt
@@ -61,7 +60,7 @@ $env:PM="conda";
 .\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
 ```
 
-## Create and install intel-extension (final one)
+## Create and install xpu torch intel-extension (final one)
 Create VENV
 ```Anaconda Powershell
 cd $env:USERPROFILE\Documents\VCS\llm-train;
