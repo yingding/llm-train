@@ -1,5 +1,5 @@
 # run: conda env create --file environment.yml
-name: C:\Users\yingdingwang\Documents\VENV\gpt3.12conda
+name: C:\Users\yingdingwang\Documents\VENV\gpt3.12winconda
 channels:
   - defaults
   - https://repo.anaconda.com/pkgs/main
