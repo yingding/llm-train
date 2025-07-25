@@ -79,7 +79,13 @@ if ($PM -notin $validPM) {
         # } elseif ($env:PY_VERSION -eq "3.12") {
         #     $condaCmd = "$env:USERPROFILE\AppData\Local\miniconda312\Scripts\conda.exe";
         # }
-        $condaCmd = "$env:USERPROFILE\AppData\Local\miniconda3\Scripts\conda.exe";
+        # $condaCmd = "$env:USERPROFILE\AppData\Local\miniconda3\Scripts\conda.exe";
+        $condaCmd = "C:\ProgramData\miniconda3\Scripts\conda.exe";
+
+        # accept the terms of the channel
+        Invoke-Expression "& $condaCmd tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main";
+        Invoke-Expression "& $condaCmd tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r";
+        Invoke-Expression "& $condaCmd tos accept --override-channels --channel https://repo.anaconda.com/pkgs/msys2";
  
         $previousLocation = Get-Location
         # create the virtual environment
