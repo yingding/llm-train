@@ -61,6 +61,9 @@ $env:PM="conda";
 ```
 
 ## Create and install xpu torch intel-extension (final one)
+Add the path to your user env variables: (installed for all users)
+*  C:\ProgramData\miniconda3\Scripts\
+
 Create VENV
 ```Anaconda Powershell
 cd $env:USERPROFILE\Documents\VCS\llm-train;
