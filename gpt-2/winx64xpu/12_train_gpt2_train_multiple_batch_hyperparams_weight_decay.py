@@ -12,10 +12,12 @@ import torch.nn as nn
 from torch.nn import functional as F
 import intel_extension_for_pytorch as ipex
 import os, sys
+import torchvision
 
 def print_xpu_info():
-    print(torch.__version__)
-    print(ipex.__version__)
+    print(f"torch version: {torch.__version__}")
+    print(f"torchvision version: {torchvision.__version__}")
+    print(f"ipex version: {ipex.__version__}")
     [print(f'[{i}]: {torch.xpu.get_device_properties(i)}') for i in range(torch.xpu.device_count())]
     # xpus = [f'[{i}]: {torch.xpu.get_device_properties(i)}' for i in range(torch.xpu.device_count())]
     # [print(xpu) for xpu in xpus]
