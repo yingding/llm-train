@@ -1,19 +1,27 @@
-import math
-import inspect
-from dataclasses import dataclass
-import torch
-import torch.nn as nn
-from torch.nn import functional as F
-
 from applyllm.accelerators import (
-    AcceleratorHelper, DIR_MODE_MAP
+    AcceleratorHelper,
+    DirectorySetting
 )
 import os
 
-# set up the torch mps environment and huggingface cache home, before importing datasets and transformers
-dev_host="kf_notebook"
-AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP.get(dev_host))
+# Set CUDA memory allocation configuration to avoid fragmentation
+os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
+
+uuids = AcceleratorHelper.nvidia_device_uuids_filtered_by(is_mig=False)
+print(f"uuids: {uuids}")
+
+dir_azure = DirectorySetting(
+    home_dir="~/cloudfiles/code/Users",
+    transformers_cache_home="MODELS",
+    huggingface_token_file="MODELS/.huggingface_token"
+)
+AcceleratorHelper.init_torch_env(accelerator="cuda", dir_setting=dir_azure, uuids=uuids)
 print(os.environ['XDG_CACHE_HOME'])
+
+# set up the torch mps environment and huggingface cache home, before importing datasets and transformers
+# dev_host="kf_notebook"
+# AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP.get(dev_host))
+# print(os.environ['XDG_CACHE_HOME'])
 # ----------------------------
 """
 https://github.com/karpathy/build-nanogpt/blob/master/train_gpt2.py
