@@ -5,4 +5,5 @@
 condaenv**.requirements.txt
 nc_workspace/
 **/data/
+.vscode/
 

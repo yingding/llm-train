@@ -6,13 +6,14 @@ import torch.nn as nn
 from torch.nn import functional as F
 
 from applyllm.accelerators import (
-    AcceleratorHelper, DIR_MODE_MAP
+    AcceleratorHelper, 
+    DIR_MODE_MAP
 )
 import os
 
 # set up the torch mps environment and huggingface cache home, before importing datasets and transformers
 dev_host="mac_local"
-AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP.get(dev_host))
+AcceleratorHelper.init_torch_env(accelerator="mps", dir_setting=DIR_MODE_MAP.get(dev_host))
 print(os.environ['XDG_CACHE_HOME'])
 
 # ----------------------------
