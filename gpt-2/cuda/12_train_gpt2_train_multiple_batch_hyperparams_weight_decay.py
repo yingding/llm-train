@@ -1,3 +1,18 @@
+from applyllm.accelerators import (
+    AcceleratorHelper,
+    DirectorySetting
+)
+uuids = AcceleratorHelper.extract_nvidia_device_uuids()
+print(f"uuids: {uuids}")
+
+dir_azure = DirectorySetting(
+    cache_home="~/cloudfiles/code/Users",
+    transformers_cache_home="MODELS",
+    huggingface_token_file="MODELS/.huggingface_token"
+)
+AcceleratorHelper.init_torch_env(accelerator="cuda", dir_setting=dir_azure, uuids=uuids)
+print(os.environ['XDG_CACHE_HOME'])
+
 import math
 import inspect
 from dataclasses import dataclass
@@ -5,15 +20,14 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-from applyllm.accelerators import (
-    AcceleratorHelper, DIR_MODE_MAP
-)
 import os
 
 # set up the torch mps environment and huggingface cache home, before importing datasets and transformers
-dev_host="kf_notebook"
-AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP.get(dev_host))
-print(os.environ['XDG_CACHE_HOME'])
+# dev_host="kf_notebook"
+# AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP.get(dev_host))
+# print(os.environ['XDG_CACHE_HOME'])
+
+
 
 # ----------------------------
 """
