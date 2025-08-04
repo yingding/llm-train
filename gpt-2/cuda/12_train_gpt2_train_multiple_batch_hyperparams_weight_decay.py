@@ -2,7 +2,8 @@ from applyllm.accelerators import (
     AcceleratorHelper,
     DirectorySetting
 )
-uuids = AcceleratorHelper.extract_nvidia_device_uuids()
+
+uuids = AcceleratorHelper.nvidia_device_uuids_filtered_by(is_mig=False)
 print(f"uuids: {uuids}")
 
 dir_azure = DirectorySetting(
