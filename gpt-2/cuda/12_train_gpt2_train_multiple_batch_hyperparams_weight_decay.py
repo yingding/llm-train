@@ -7,7 +7,7 @@ uuids = AcceleratorHelper.nvidia_device_uuids_filtered_by(is_mig=False)
 print(f"uuids: {uuids}")
 
 dir_azure = DirectorySetting(
-    cache_home="~/cloudfiles/code/Users",
+    home_dir="~/cloudfiles/code/Users",
     transformers_cache_home="MODELS",
     huggingface_token_file="MODELS/.huggingface_token"
 )
