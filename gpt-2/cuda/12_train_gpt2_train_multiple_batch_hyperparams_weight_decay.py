@@ -377,7 +377,9 @@ training_data_path = os.path.join(parent_dir, "data/input.txt")
 
 # train_loader = DataLoaderLite(B=4, T=32, data_path=training_data_path)
 # Batch size B should be the number of power of 2 to run efficiently on the GPU
-train_loader = DataLoaderLite(B=16, T=1024, data_path=training_data_path)
+# train_loader = DataLoaderLite(B=16, T=1024, data_path=training_data_path)
+# T4 16GB Memory
+train_loader = DataLoaderLite(B=8, T=1024, data_path=training_data_path)
 
 # set the float32 matmul precision to high, to use the high precision matmul kernels
 # 'highest' uses FP32, 'high' uses TF32
