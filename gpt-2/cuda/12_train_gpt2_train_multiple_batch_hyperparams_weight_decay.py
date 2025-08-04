@@ -2,6 +2,7 @@ from applyllm.accelerators import (
     AcceleratorHelper,
     DirectorySetting
 )
+import os
 
 uuids = AcceleratorHelper.nvidia_device_uuids_filtered_by(is_mig=False)
 print(f"uuids: {uuids}")
@@ -21,7 +22,6 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-import os
 
 # set up the torch mps environment and huggingface cache home, before importing datasets and transformers
 # dev_host="kf_notebook"
