@@ -4,6 +4,9 @@ from applyllm.accelerators import (
 )
 import os
 
+# Set CUDA memory allocation configuration to avoid fragmentation
+os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
+
 uuids = AcceleratorHelper.nvidia_device_uuids_filtered_by(is_mig=False)
 print(f"uuids: {uuids}")
 
