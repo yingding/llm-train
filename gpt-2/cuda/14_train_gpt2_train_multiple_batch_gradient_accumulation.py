@@ -18,6 +18,13 @@ dir_azure = DirectorySetting(
 AcceleratorHelper.init_torch_env(accelerator="cuda", dir_setting=dir_azure, uuids=uuids)
 print(os.environ['XDG_CACHE_HOME'])
 
+import math
+import inspect
+from dataclasses import dataclass
+import torch
+import torch.nn as nn
+from torch.nn import functional as F
+
 # set up the torch mps environment and huggingface cache home, before importing datasets and transformers
 # dev_host="kf_notebook"
 # AcceleratorHelper.init_mps_torch(dir_setting=DIR_MODE_MAP.get(dev_host))
