@@ -1,5 +1,5 @@
 # run: conda env create --file environment.yml
-name: C:\Users\yingdingwang\Documents\VENV\gpt3.12winconda
+name: gpt3.12winconda
 channels:
   - defaults
   - https://repo.anaconda.com/pkgs/main
@@ -19,10 +19,10 @@ dependencies:
   # and for wheels
   # a lot will be installed due to dependency to applyllm
   # https://stackoverflow.com/questions/57043452/how-to-add-a-package-specific-index-url-to-requirements-txt
-  - torch==2.7.0
-  - torchvision==0.22.0
-  - torchaudio==2.7.0
-  - intel-extension-for-pytorch==2.7.10+xpu
+  - torch==2.8.0
+  - torchvision==0.23.0
+  - torchaudio==2.8.0
+  - intel-extension-for-pytorch==2.8.10+xpu
   - ipykernel
   - --index-url https://download.pytorch.org/whl/xpu
   - --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us/

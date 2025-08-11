@@ -64,6 +64,12 @@ $env:PM="conda";
 Add the path to your user env variables: (installed for all users)
 *  C:\ProgramData\miniconda3\Scripts\
 
+Update the conda in default base env, before create the venv prefix for new conda env
+```Anaconda Powershell Admin
+# update base
+conda update -n base -c defaults conda
+```
+
 Create VENV
 ```Anaconda Powershell
 cd $env:USERPROFILE\Documents\VCS\llm-train;
@@ -74,6 +80,17 @@ $env:ENV_SURFIX="winconda";
 $env:PM="conda";
 .\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
 ```
+
+<!-->```Anaconda Powershell Admin
+# update base
+$env:VERSION = "3.12";
+$env:ENV_NAME = "gpt${env:VERSION}winconda";
+conda activate "$HOME\Documents\VENV\${env:ENV_NAME}";
+# used prefix not name, -n will not work
+# conda not installed in prefix
+# conda update --prefix "$HOME\Documents\VENV\${env:ENV_NAME}" -c defaults conda
+```
+-->
 
 Install the Intell extension
 ```Anaconda Powershell
@@ -90,7 +107,7 @@ which pip
 ```
 
 
-## Install XPU with intel-extension-for-pytorch
+## (Optional manually) Install XPU with intel-extension-for-pytorch 2.7.10
 
 Training framework
 

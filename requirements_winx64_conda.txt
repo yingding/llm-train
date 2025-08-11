@@ -1,17 +1,18 @@
 ipywidgets==8.1.7
 applyllm==0.0.8.post1
 
-transformers==4.52.4
-accelerate==1.8.1
+transformers==4.55.0
+accelerate==1.10.0
 
-matplotlib>=3.10.0
+# matplotlib>=3.10.0
+matplotlib==3.10.5
 # tiktoken==0.8.0
-tiktoken==0.9.0
-pydantic>=2.8.2
-# pydantic==2.11.4
+tiktoken==0.11.0
+# pydantic>=2.8.2
+pydantic==2.11.7
 # typing guard back port to 3.8 
-typing-extensions==4.14.0
-bitsandbytes==0.46.0
+typing-extensions==4.14.1
+bitsandbytes==0.46.1
 
 
 # intel npu extension for torch
