@@ -1,22 +1,25 @@
 ipywidgets==8.1.7
 applyllm==0.0.8.post1
 
-transformers==4.55.0
-accelerate==1.10.0
+# transformers==4.55.0
+# accelerate==1.10.0
+transformers==4.56.2
+accelerate==1.10.1
 
 torch==2.8.0
 torchaudio==2.8.0
 torchvision==0.23.0
 
-matplotlib==3.10.5
+# matplotlib==3.10.5
+matplotlib==3.10.6
 tiktoken==0.11.0
-# pydantic==2.10.2
-pydantic==2.11.7
+# pydantic==2.11.7
+pydantic==2.11.9
 # typing guard back port to 3.8 
 # typing-extensions==4.12.2
 
-# mlx==0.21.0
-# mlx-lm==0.20.1
+# mlx==0.28.0
+# mlx-lm==0.26.3
 
-mlx==0.28.0
-mlx-lm==0.26.3
+mlx==0.29.1
+mlx-lm==0.28.0
