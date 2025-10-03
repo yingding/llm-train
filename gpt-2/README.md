@@ -119,17 +119,9 @@ They all look roughly the same.
 Later in the optimization, once you have learned all the simple stuff. 
 That is where the actual work starts. That is where the gradients become more decorrelated.
 
-
-
 ## Note:
 INT8 is used for inference, but not training. INT8 has a uniform spacing. we shall use float to have a better match of the normal distribution of weights during the training of neural networks.
 
 For training bfloat16 has more TFLOPS than the standard float32.
 
 GPU Memory Bandwidth: the speed of which you can access the GPU memory.
-
-
-
-
-
-
