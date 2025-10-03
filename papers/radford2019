@@ -1,5 +1,7 @@
 # Radford2019
-Summary of the paper "Language Models are Unsupervised Multitask Learners" by Radford et al. (2019), which introduced GPT-2:
+Summary of the paper "Language Models are Unsupervised Multitask Learners" by Radford et al. (2019), which introduced GPT-2
+
+https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf
 
 ## Core Idea
 The paper demonstrates that large language models, when trained on sufficiently diverse and large datasets, can perform a wide range of natural language processing (NLP) tasks without explicit supervision. This is achieved through zero-shot learning, where the model generalises to tasks it was never directly trained on.
