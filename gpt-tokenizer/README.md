@@ -4,7 +4,7 @@ The Tokenizer is a necessary and pervasive component of Large Language Models (L
 
 ## Tokenization Web App Sample
 
-Good tokenization web app: [https://tiktokenizer.vercel.app](https://tiktokenizer.vercel.app)
+Good tokenization web app: https://tiktokenizer.vercel.app
 
 ## min bpm
 

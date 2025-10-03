@@ -20,4 +20,22 @@ Tokenization is at the heart of much weirdness of LLMs. Do not brush it off.
 
 
 ## Progress
+Tokenization Web Demo App
+https://youtu.be/zduSFxRajkE?t=368
+(6:08)
 
+
+
+
+## Notes
+
+For the same sentence from english translated to german (non-english), the tokenizer will break up the sentence to more tokens, als the english sentence. For the same meaning, you have less context window, since the tokens are more used for non-english as english.
+
+| Language | Tokenizer | Sentence |  Number of Words | tokens | Number of Tokens | tokens-words ratio |
+|----------|-------|----------|------------------|--------|------------------|---------------------|
+| English  | GPT-2 | Hello World, how are you doing | 6 words | 15496, 2159, 11, 703, 389, 345, 1804 | 7 tokens | 7/6 = 1.17 |
+| German   | GPT-2 | Hallo Welt, wie geht es dir   | 6 words | 34194, 78, 370, 2120, 11, 266, 494, 4903, 4352, 1658, 26672, 220 | 12 tokens | 12/6= 2.0 |
+| English  | GPT-4 | Hello World, what a wonderful day| 6 words | 9906, 4435, 11, 1148, 264, 11364, 1938 | 7 tokens | 7/6= 1.17 |
+| German   | GPT-4 | Hallo Welt, was für ein wundervoller Tag   | 7 words | 79178, 46066, 11, 574, 7328, 4466, 289, 1263, 651, 70496, 12633 | 11 tokens | 11/7= 1.57 |
+
+Tokenizer has a smaller "tokens-words ratio" for english language, since the training dataset for LLM has more english text than german text, thus the tokenizer can have a large chunk for english words.
