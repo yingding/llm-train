@@ -24,8 +24,11 @@ Tokenization Web Demo App
 https://youtu.be/zduSFxRajkE?t=368
 (6:08)
 
+Unicode - python ord()
+https://youtu.be/zduSFxRajkE?t=1016
+(16:56)
 
-
+**GOON**
 
 ## Notes
 
@@ -39,3 +42,5 @@ For the same sentence from english translated to german (non-english), the token
 | German   | GPT-4 | Hallo Welt, was für ein wundervoller Tag   | 7 words | 79178, 46066, 11, 574, 7328, 4466, 289, 1263, 651, 70496, 12633 | 11 tokens | 11/7= 1.57 |
 
 Tokenizer has a smaller "tokens-words ratio" for english language, since the training dataset for LLM has more english text than german text, thus the tokenizer can have a large chunk for english words.
+
+GPT-4 tokenizer (cl100k_base)
