@@ -1,0 +1,45 @@
+# Radford2019
+Summary of the paper "Language Models are Unsupervised Multitask Learners" by Radford et al. (2019), which introduced GPT-2:
+
+## Core Idea
+The paper demonstrates that large language models, when trained on sufficiently diverse and large datasets, can perform a wide range of natural language processing (NLP) tasks without explicit supervision. This is achieved through zero-shot learning, where the model generalises to tasks it was never directly trained on.
+
+## Key Contributions
+
+### 1. WebText Dataset
+* Existing web scrapes like Common Crawl suffer from poor quality and test-set contamination.
+* Authors created WebText, a dataset of millions of webpages sourced from outbound Reddit links (excluding Wikipedia to avoid overlap with Wikitext).
+* This filtering ensures higher-quality, human-interest content.
+
+### 2. Model Architecture
+*  GPT-2: A Transformer-based model with 1.5 billion parameters.
+* Trained on WebText using unsupervised language modelling (predicting next token).
+* No task-specific fine-tuning; tasks are handled in a zero-shot setting.
+
+### 3. Encoding Strategy
+* Used Byte Pair Encoding (BPE) for tokenisation.
+* BPE merges frequent byte pairs into tokens, balancing between character-level and word-level representations.
+* Authors modified BPE to avoid suboptimal merges across character categories.
+
+### 4. Zero-Shot Task Performance
+* Tasks include question answering, translation, summarisation, reading comprehension.
+* Example: On CoQA, GPT-2 achieved 55 F1, matching or beating 3 out of 4 supervised baselines—without using 127k labelled examples.
+* Performance improves log-linearly with model size.
+
+## Results
+* GPT-2 achieved state-of-the-art results on 7 out of 8 language modelling benchmarks in zero-shot settings.
+* Generated text samples were coherent and contextually relevant.
+* Despite its size, GPT-2 still underfits WebText, suggesting even larger models could perform better.
+
+## Challenges & Limitations
+* Data Overlap: Significant overlap between training and test sets (e.g., 1BW dataset had 13.2% overlap).
+* Underfitting: Indicates need for larger models and better data handling.
+* Information Leakage: Performance gains may partly result from train-test contamination.
+
+## Future Directions
+* Improve deduplication between training and test sets.
+* Explore scaling laws for model size and performance.
+* Build systems that learn from naturally occurring demonstrations, reducing reliance on labelled datasets.
+
+## Significance
+This work paved the way for general-purpose language models capable of multitask learning without fine-tuning, influencing subsequent models like GPT-3 and beyond. It highlights the importance of scale, data quality, and unsupervised learning in NLP.
