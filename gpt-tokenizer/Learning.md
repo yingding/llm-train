@@ -28,6 +28,10 @@ Unicode - python ord()
 https://youtu.be/zduSFxRajkE?t=1016
 (16:56)
 
+BPM - merge the most frequent token pair with new token, utf-8 ranges `[0, 255]` replace the first token pair with `256`
+https://youtu.be/zduSFxRajkE?t=1916
+(31:56)
+
 **GOON**
 
 ## Notes
@@ -48,3 +52,19 @@ GPT-4 tokenizer (cl100k_base)
 ## Encoding
 Unicode standard is constantly changing, which is not stable.
 https://www.reedbeta.com/blog/programmers-intro-to-unicode/
+
+The "utf-8" encoding has a value range of 256, with this encoding chunks will be small and token sequence for the prompt will be very long. With a finite context windows, long token sequence for same input text is inefficient.
+
+BPE will compress the "utf-8" raw byte encoding so that the compressed encoding can be passed to the transformer.
+
+## Tokenization-free autoreressive sequence modeling
+Using the raw "utf-8" byte string without tokenizer
+Modified the transformer to be hierachical transformer to feed in raw utf-8 byte
+
+MEGABYTE: Predicting Million-byte Sequences with Multiscale Transformers: https://arxiv.org/pdf/2305.07185
+
+## BPE
+Byte Pair Encoding: the input sequence is too long, we would like to compress it.
+1. Find the pair of token, that ocurs the most frequently.
+2. We replace the pair of tokens with a single new token, and append it to vocabulary (lookup table for token to char)
+3. repeat whole proccess for new most frequently pair of tokens (to iteratively compress the sequence)
