@@ -81,7 +81,8 @@ $env:PM="conda";
 .\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
 ```
 
-<!-->```Anaconda Powershell Admin
+<!--
+```Anaconda Powershell Admin
 # update base
 $env:VERSION = "3.12";
 $env:ENV_NAME = "gpt${env:VERSION}winconda";
