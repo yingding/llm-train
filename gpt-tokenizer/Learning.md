@@ -68,3 +68,5 @@ Byte Pair Encoding: the input sequence is too long, we would like to compress it
 1. Find the pair of token, that ocurs the most frequently.
 2. We replace the pair of tokens with a single new token, and append it to vocabulary (lookup table for token to char)
 3. repeat whole proccess for new most frequently pair of tokens (to iteratively compress the sequence)
+
+https://en.wikipedia.org/wiki/Byte-pair_encoding
