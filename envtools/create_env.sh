@@ -16,11 +16,12 @@
 showhelp() {
     echo "
         please pass option:
+        -e|--env "envname" to create a python env with this name
         -v|--version 3.9 | 3.10 | 3.11 | 3.12 | 3.13
-        -p|--path ~/VENV/test
+        -p|--path ~/VENV
 
         example: 
-           source create_env.sh -p ~/VENV/test3.9 -v 3.9
+           source create_env.sh -p ~/VENV -v 3.9 -e test
 
         will create a python 3.9 venv at the path
         ~/VENV/test3.9   
@@ -37,7 +38,8 @@ show_venv_info() {
     echo "
     create a python venv
     version: $pythonversion
-    at path: $envpath
+    name: $envname
+    at path: "$envpath/$envname"
     "
     #$envpath/$envname
 }
@@ -45,10 +47,10 @@ show_venv_info() {
 show_info_activation() {
     echo "
     use 
-        source $envpath/bin/activate
+        source $envpath/$envname/bin/activate
     to activate your env
     to deactivate with
-        deactivate    
+        deactivate
     "
 }
 
@@ -77,7 +79,7 @@ generate_cmd_macos() {
         myexec="/usr/local/bin/python${pythonversion}"
         # myexec="/usr/local/opt/python@${pythonversion}/bin/python3"
     fi
-    mycmd="$myexec -m venv $envpath"
+    mycmd="$myexec -m venv $envpath/$envname"
 }
 
 check_cmd_exists() {
@@ -99,11 +101,13 @@ create_env() {
             eval ${mycmd};
             # making env is successful
             if [[ $? -eq 0 ]]; then
-                echo "activate the python venv $envpath..."
-                eval "source $envpath/bin/activate";
+                echo "activate the python venv $envpath/$envname..."
+                eval "source $envpath/$envname/bin/activate";
                 eval "python3 -m pip install --upgrade pip";
+                eval "python3 -m pip install ipykernel";
+                eval "python3 -m ipykernel install --user --name=$envname --display-name $envname";
                 eval "deactivate"
-                echo "$envpath deactivated"
+                echo "$envpath/$envname deactivated"
                 show_info_activation
             fi
             ;;
@@ -131,8 +135,8 @@ exec_main() {
 ## check the user inputs
 while [[ "$#" -gt 0 ]]
 do case $1 in 
-    #-e|--env) envname="$2"
-    #shift;;
+    -e|--env) envname="$2"
+    shift;;
     -v|--version) pythonversion="$2"
     shift;;
     -p|--path) envpath="$2"
@@ -147,8 +151,7 @@ done
 # https://rowannicholls.github.io/bash/intro/passing_arguments.html
 
 # if one of the variable has zero length
-# if [[ -z "$envname" || -z "$pythonversion" || -z "$envpath" ]]; then 
-if [[ -z "$pythonversion" || -z "$envpath" ]]; then
+if [[ -z "$envname" || -z "$pythonversion" || -z "$envpath" ]]; then
     showhelp
 else
     if ! [[ $pythonversion =~ ^(3.9|3.10|3.11|3.12|3.13) ]]; then

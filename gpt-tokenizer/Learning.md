@@ -44,3 +44,7 @@ For the same sentence from english translated to german (non-english), the token
 Tokenizer has a smaller "tokens-words ratio" for english language, since the training dataset for LLM has more english text than german text, thus the tokenizer can have a large chunk for english words.
 
 GPT-4 tokenizer (cl100k_base)
+
+## Encoding
+Unicode standard is constantly changing, which is not stable.
+https://www.reedbeta.com/blog/programmers-intro-to-unicode/
