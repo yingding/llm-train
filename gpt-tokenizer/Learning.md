@@ -56,9 +56,9 @@ Tiktoken lib for tokenization by openai
 https://youtu.be/zduSFxRajkE?t=4304
 (1:11:44)
 
-
-
-
+Walk through gpt-2 `encoder.py` file
+https://youtu.be/zduSFxRajkE?t=4506
+(1:15:07)
 
 **GOON**
 
@@ -129,6 +129,25 @@ GPT-2 `encoder.py` uses the regex pattern `gpt2pat = re.compile(r"""'s|'t|'re|'v
 All the element of this splitted list can be processed independently by the tokenizer, so that only the tokens inside each of splitted list can be merged by the BPE. By splitting up text in this way, gpt-2 tokenizer will not merge the token cross works and punctuations.
 
 The `encoder.py` is only the inference code, the training code for tokenizer for gpt-2 is not released by openai. By the web gpt-2 tokenizer, the spaces in python code are not merged by the tokenizer in the vocabulary. There must be addiontal rules applied by the training code of gpt-2 by openai.
+
+## Tiktoken Fast BPE inference lib
+In the tiktoken code https://github.com/openai/tiktoken/blob/main/tiktoken_ext/openai_public.py
+
+```python
+# The pattern in the original GPT-2 release is:
+# r"""'s|'t|'re|'ve|'m|'ll|'d| ?[\p{L}]+| ?[\p{N}]+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+# This is equivalent, but executes faster:
+r50k_pat_str = (
+    r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}++| ?\p{N}++| ?[^\s\p{L}\p{N}]++|\s++$|\s+(?!\S)|\s"""
+)
+```
+openai changes the pattern for split up the text.
+
+`cl100K_base` gpt-4 tokenizer has different text split pattern. All the space charators are grouped together. 
+`\p{N}{1,3}+` only split up to 3 digits of number, only 3 number of digits will be merged as token in the BPE added to the new token vocabulary in gpt4.
+```python
+"pat_str": r"""'(?i:[sdmt]|ll|ve|re)|[^\r\n\p{L}\p{N}]?+\p{L}++|\p{N}{1,3}+| ?[^\s\p{L}\p{N}]++[\r\n]*+|\s++$|\s*[\r\n]|\s+(?!\S)|\s"""
+```
 
 
 
