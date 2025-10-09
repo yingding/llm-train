@@ -32,6 +32,14 @@ BPM - merge the most frequent token pair with new token, utf-8 ranges `[0, 255]`
 https://youtu.be/zduSFxRajkE?t=1916
 (31:56)
 
+What mean Training of Tokenizer?: Using BPM on the Tokenizer training dataset to determine the token vocabulary
+https://youtu.be/zduSFxRajkE?t=2360
+(39:20)
+
+
+
+
+
 **GOON**
 
 ## Notes
