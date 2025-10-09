@@ -48,6 +48,16 @@ Tokenizer in GPT Series (GPT2)
 https://youtu.be/zduSFxRajkE?t=3457
 (57:37)
 
+Regex pattern for enforcing BPM exception
+https://youtu.be/zduSFxRajkE?t=3636
+(1:00:36)
+
+Tiktoken lib for tokenization by openai
+https://youtu.be/zduSFxRajkE?t=4304
+(1:11:44)
+
+
+
 
 
 **GOON**
@@ -107,5 +117,22 @@ Given a sequence of integers in the range [0, vocab_size], what is the text?
 
 While decoding the bytes, multi-bytes need to following start bytes, use `tokens.decode("utf-8", errors="replace")` to replace the start byte
 https://en.wikipedia.org/wiki/UTF-8
+
+## BPE enforced token merging rules
+From the Radford2019, the many variants of token with punctuations e.g. `dog.`, `dog!`, `dog?` will be merged as new tokens in the vocabulary. This results in a sub-optimal allocation of limited vocabulary slots and model capacity. To avoid this, rules are added to prevent BPE from merging across character categories for any byte sequence.
+
+GPT-2 `encoder.py` is the encode and decode: https://github.com/openai/gpt-2/blob/master/src/encoder.py
+
+`regex` is an extension of `re` in python, a more powerful `re` version.
+
+GPT-2 `encoder.py` uses the regex pattern `gpt2pat = re.compile(r"""'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+""")` to split input text into token list first.
+All the element of this splitted list can be processed independently by the tokenizer, so that only the tokens inside each of splitted list can be merged by the BPE. By splitting up text in this way, gpt-2 tokenizer will not merge the token cross works and punctuations.
+
+The `encoder.py` is only the inference code, the training code for tokenizer for gpt-2 is not released by openai. By the web gpt-2 tokenizer, the spaces in python code are not merged by the tokenizer in the vocabulary. There must be addiontal rules applied by the training code of gpt-2 by openai.
+
+
+
+
+
 
 
