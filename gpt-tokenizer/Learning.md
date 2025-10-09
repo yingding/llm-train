@@ -44,6 +44,10 @@ Encoding of tokenizer
 https://youtu.be/zduSFxRajkE?t=2926
 (48:46)
 
+Tokenizer in GPT Series (GPT2)
+https://youtu.be/zduSFxRajkE?t=3457
+(57:37)
+
 
 
 **GOON**
