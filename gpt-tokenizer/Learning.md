@@ -70,3 +70,10 @@ Byte Pair Encoding: the input sequence is too long, we would like to compress it
 3. repeat whole proccess for new most frequently pair of tokens (to iteratively compress the sequence)
 
 https://en.wikipedia.org/wiki/Byte-pair_encoding
+
+## Tokenizer Training
+The Tokenizer is a completely separate, **independent** module from the LLM. 
+
+Tokenizer has its own training dataset of text (which could be different from that of the LLM), on which you train the vocabulary using the Byte Pair Encoding (BPE) algorithm. It then translates back and forth between raw text and sequences of tokens. The LLM later only ever sees the tokens and never directly deals with any text.
+
+The training of BPM, in the sense of most frequent token pairs seen in the training set of the tokenizer. The training set determines how the text will be compressed to token vocabulary.
