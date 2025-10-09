@@ -36,7 +36,13 @@ What mean Training of Tokenizer?: Using BPM on the Tokenizer training dataset to
 https://youtu.be/zduSFxRajkE?t=2360
 (39:20)
 
+Decoding of tokenizer
+https://youtu.be/zduSFxRajkE?t=2570
+(42:50)
 
+Encoding of tokenizer
+https://youtu.be/zduSFxRajkE?t=2926
+(48:46)
 
 
 
@@ -85,3 +91,17 @@ The Tokenizer is a completely separate, **independent** module from the LLM.
 Tokenizer has its own training dataset of text (which could be different from that of the LLM), on which you train the vocabulary using the Byte Pair Encoding (BPE) algorithm. It then translates back and forth between raw text and sequences of tokens. The LLM later only ever sees the tokens and never directly deals with any text.
 
 The training of BPM, in the sense of most frequent token pairs seen in the training set of the tokenizer. The training set determines how the text will be compressed to token vocabulary.
+
+Tokenizer is a translation layer between raw text and token sequence, by using the encoding and decoding step.
+
+You may want to have the training set be different between the tokenizer and LLM. While training the tokenizer, we care about different languages, code or not-code. More data to a language during the tokenizer training will allow more merges to be done by the tokenizer, so that the LLM will have more densed token to work with, since the context window is finite for LLM.
+
+(Better training of tokenizer, will be to have more merges to allow more information to be condense into token-space )
+
+## Tokenizer Decoding
+Given a sequence of integers in the range [0, vocab_size], what is the text?
+
+While decoding the bytes, multi-bytes need to following start bytes, use `tokens.decode("utf-8", errors="replace")` to replace the start byte
+https://en.wikipedia.org/wiki/UTF-8
+
+
