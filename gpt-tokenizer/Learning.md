@@ -149,6 +149,12 @@ openai changes the pattern for split up the text.
 "pat_str": r"""'(?i:[sdmt]|ll|ve|re)|[^\r\n\p{L}\p{N}]?+\p{L}++|\p{N}{1,3}+| ?[^\s\p{L}\p{N}]++[\r\n]*+|\s++$|\s*[\r\n]|\s+(?!\S)|\s"""
 ```
 
+In the [encoder.py](https://github.com/openai/gpt-2/blob/master/src/encoder.py) file, openai is saving the `encoder.json` (base vocab), `vocab.bpe` (bpe_merges for merged new vocab from BPE training).
+
+With the `base vocab` and `bpe_merges` files, you can save the tokenizer for encoding and decoding.
+
+
+
 
 
 
