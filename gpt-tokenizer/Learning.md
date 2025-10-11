@@ -68,6 +68,18 @@ Special tokens
 https://youtu.be/zduSFxRajkE?t=4709
 (1:18:29)
 
+Extending tiktoken
+https://youtu.be/zduSFxRajkE?t=4996
+(1:23:16)
+
+GPT-4 Special tokens and FIM tasks
+https://youtu.be/zduSFxRajkE?t=5041
+(1:24:01)
+
+
+
+
+
 **GOON**
 
 ## Notes
@@ -157,9 +169,82 @@ openai changes the pattern for split up the text.
 "pat_str": r"""'(?i:[sdmt]|ll|ve|re)|[^\r\n\p{L}\p{N}]?+\p{L}++|\p{N}{1,3}+| ?[^\s\p{L}\p{N}]++[\r\n]*+|\s++$|\s*[\r\n]|\s+(?!\S)|\s"""
 ```
 
-In the [encoder.py](https://github.com/openai/gpt-2/blob/master/src/encoder.py) file, openai is saving the `encoder.json` (base vocab), `vocab.bpe` (bpe_merges for merged new vocab from BPE training).
+In the [encoder.py](https://github.com/openai/gpt-2/blob/master/src/encoder.py) file, openai is saving the `encoder.json` (total vocabulary), `vocab.bpe` (bpe_merges for merged new vocab from BPE training).
 
-With the `base vocab` and `bpe_merges` files, you can save the tokenizer for encoding and decoding.
+With the `total vocab` and `bpe_merges` files, you can save the tokenizer for encoding and decoding.
+
+## Special tokens
+We can insert additional tokens that we can use to delimit different parts of the data, to create a special structure of the token strings
+
+token `'<|endoftext|>'` in the vocabular (`encoder['<|endoftext|>']` ) is used to delimit documents in the training set.
+
+This special token tells the language model, that what follows by the `'<|endoftext|>'` is a new document, which is not related to the previous token strings.
+
+Then `'<|endoftext|>'` doesn't go through the BPE merges, the code output the tokens has special case instructions for handling special tokens.
+
+In the `tiktoken` ROS [lib.rs](https://github.com/openai/tiktoken/blob/main/src/lib.rs), search for `allowed_special`. These `allowed_special` are the code for handling the special tokens for openai tiktoken.
+
+Wenn ever the tokenizer see these special token, the code will swap the BPE tokens with the special token. The special tokens are out side of the algorithm of the BPE (Byte Pair Encoding).
+
+The special tokens can be used in the fine-tuning stage to delimit the conversation, between an assistant and a user.
+
+E.g. gpt-3.5-turbo is a fine tuned model, which contains special tokens (https://tiktokenizer.vercel.app/)
+
+`<|im_start|>` is the abv of imaginary monologue
+
+## Extending tiktoken
+
+```python
+cl100k_base = tiktoken.get_encoding("cl100k_base")
+
+# In production, load the arguments directly instead of accessing private attributes
+# See openai_public.py for examples of arguments for specific encodings
+enc = tiktoken.Encoding(
+    # If you're changing the set of special tokens, make sure to use a different name
+    # It should be clear from the name what behaviour to expect.
+    name="cl100k_im",
+    pat_str=cl100k_base._pat_str,
+    mergeable_ranks=cl100k_base._mergeable_ranks,
+    special_tokens={
+        **cl100k_base._special_tokens,
+        "<|im_start|>": 100264,
+        "<|im_end|>": 100265,
+    }
+)
+```
+Reference:
+* https://github.com/openai/tiktoken?tab=readme-ov-file#extending-tiktoken
+
+The sample of initialize `tiktoken_ext` for gpt-2:
+
+```python
+def gpt2():
+    mergeable_ranks = data_gym_to_mergeable_bpe_ranks(
+        vocab_bpe_file="https://openaipublic.blob.core.windows.net/gpt-2/encodings/main/vocab.bpe",
+        encoder_json_file="https://openaipublic.blob.core.windows.net/gpt-2/encodings/main/encoder.json",
+        vocab_bpe_hash="1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+        encoder_json_hash="196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783",
+    )
+    return {
+        "name": "gpt2",
+        "explicit_n_vocab": 50257,
+        "pat_str": r50k_pat_str,
+        "mergeable_ranks": mergeable_ranks,
+        "special_tokens": {ENDOFTEXT: 50256},
+    }
+```
+
+* GPT-2 Tiktoken extension https://github.com/openai/tiktoken/blob/main/tiktoken_ext/openai_public.py
+* Try tiktoken onine https://tiktokenizer.vercel.app
+
+
+## GPT-4 Special tokens
+`FIM_PREFIX`: Fill in the middle prefix
+
+Bavarian2022: https://arxiv.org/pdf/2207.14255
+
+The paper introduces a simple yet powerful method to enable **autoregressive language models** (like GPT) to perform **Fill-in-the-Middle (FIM)** tasks. Traditionally, these models generate text left-to-right, which limits their ability to insert content in the middle of existing text. The authors propose a **data transformation technique**: move a random span from the middle of a document to the end during training. This trains the model to predict missing spans given both preceding and succeeding context.
+
 
 
 
