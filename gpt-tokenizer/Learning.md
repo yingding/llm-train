@@ -60,6 +60,14 @@ Walk through gpt-2 `encoder.py` file
 https://youtu.be/zduSFxRajkE?t=4506
 (1:15:07)
 
+Encoder, Byteencoder in openai `encoder.py`
+https://youtu.be/zduSFxRajkE?t=4603
+(1:16:43)
+
+Special tokens
+https://youtu.be/zduSFxRajkE?t=4709
+(1:18:29)
+
 **GOON**
 
 ## Notes
