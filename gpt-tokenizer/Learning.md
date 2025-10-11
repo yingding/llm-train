@@ -172,11 +172,11 @@ With the `total vocab` and `bpe_merges` files, you can save the tokenizer for en
 ## Special tokens
 We can insert additional tokens that we can use to delimit different parts of the data, to create a special structure of the token strings
 
-token `'<|endoftext|>'` in the vocabular (`encoder['<|endoftext|>']` ) is used to delimit documents in the training set.
+token `<|endoftext|>` in the vocabular (`encoder['<|endoftext|>']` ) is used to delimit documents in the training set.
 
-This special token tells the language model, that what follows by the `'<|endoftext|>'` is a new document, which is not related to the previous token strings.
+This special token tells the language model, that what follows by the `<|endoftext|>` is a new document, which is not related to the previous token strings.
 
-Then `'<|endoftext|>'` doesn't go through the BPE merges, the code output the tokens has special case instructions for handling special tokens.
+Then `<|endoftext|>` doesn't go through the BPE merges, the code output the tokens has special case instructions for handling special tokens.
 
 In the `tiktoken` ROS [lib.rs](https://github.com/openai/tiktoken/blob/main/src/lib.rs), search for `allowed_special`. These `allowed_special` are the code for handling the special tokens for openai tiktoken.
 
@@ -240,13 +240,4 @@ def gpt2():
 Bavarian2022: https://arxiv.org/pdf/2207.14255
 
 The paper introduces a simple yet powerful method to enable **autoregressive language models** (like GPT) to perform **Fill-in-the-Middle (FIM)** tasks. Traditionally, these models generate text left-to-right, which limits their ability to insert content in the middle of existing text. The authors propose a **data transformation technique**: move a random span from the middle of a document to the end during training. This trains the model to predict missing spans given both preceding and succeeding context.
-
-
-
-
-
-
-
-
-
 
