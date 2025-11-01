@@ -364,7 +364,21 @@ train_loader = DataLoaderLite(B=16, T=1024, data_path=training_data_path)
 # BF16 exponent is 8 bits and mantissa is 7 bits, instead 10 bits in the TF32
 # if you use FP16, you need to use gradient scaling, to avoid underflow
 # BF16 is representing the same range as FP32, but with less precision
-torch.set_float32_matmul_precision('high')
+
+# move to backend specific settings
+# torch.set_float32_matmul_precision('high')
+if device == "cuda":
+    # new API for CUDA devices
+    torch.backends.cuda.matmul.fp32_precision = 'tf32'
+    # 'ieee' for full precision   
+    # If you also want to set for convolutions:
+    # torch.backends.cudnn.conv.fp32_precision = 'tf32'
+else:
+    # mps doesn't support TF32, so this won't apply
+    # You can safely skip or keep the old API for non-CUDA devices
+    torch.set_float32_matmul_precision('high')
+
+
 # torch.set_float32_matmul_precision('medium')
 
 # get logits 
