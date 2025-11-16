@@ -9,7 +9,7 @@ channels:
 # acording to the torch page https://pypi.org/project/torch/
 dependencies:
 - python==3.12
-- libuv>=1.48.0
+- libuv==1.48.0
 - libjpeg-turbo
 - libpng 
 - pip>=24.2
