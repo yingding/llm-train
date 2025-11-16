@@ -60,11 +60,12 @@ $env:PM="conda";
 .\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
 ```
 
-## Create and install xpu torch intel-extension (final one)
+## Create and install xpu torch intel-extension on surface laptop (final one)
 Add the path to your user env variables: (installed for all users)
 *  C:\ProgramData\miniconda3\Scripts\
 
-Update the conda in default base env, before create the venv prefix for new conda env
+Update the conda in default base env, before create the venv prefix for new conda env.
+From open as admin
 ```Anaconda Powershell Admin
 # update base
 conda update -n base -c defaults conda
