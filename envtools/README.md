@@ -82,6 +82,22 @@ $env:PM="conda";
 .\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
 ```
 
+Activate and deactivate environment
+
+```Anaconda Powershell
+# activate environment
+
+$env:VERSION = "3.12";
+$env:ENV_NAME = "gpt${env:VERSION}winconda";
+conda activate "$HOME\Documents\VENV\${env:ENV_NAME}";
+
+
+# To deactivate an active environment, use
+
+conda deactivate
+```
+
+
 <!--
 ```Anaconda Powershell Admin
 # update base
