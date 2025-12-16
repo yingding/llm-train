@@ -4,6 +4,8 @@ from applyllm.accelerators import (
 )
 AcceleratorHelper.init_torch_env(accelerator="xpu", dir_setting=DIR_MODE_MAP["win_local"])
 
+# transformers v5 with pytorch as backend only
+# this script uses pytorch only, no huggingface transformers library is used.
 import math
 import inspect
 from dataclasses import dataclass
