@@ -1,7 +1,7 @@
 ipywidgets==8.1.8
 applyllm==0.0.9rc3
 
-transformers==4.57.3
+transformers>=5.0.0rc1
 accelerate==1.12.0
 
 # matplotlib>=3.10.0
