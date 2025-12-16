@@ -97,6 +97,14 @@ conda activate "$HOME\Documents\VENV\${env:ENV_NAME}";
 conda deactivate
 ```
 
+delete item from powershell
+```powershell
+$env:VERSION = "3.12";
+$env:ENV_NAME = "gpt${env:VERSION}winconda";
+$env:ENV_PATH = "$HOME\Documents\VENV\${env:ENV_NAME}";
+Remove-Item -Path ${env:ENV_PATH} -Recurse -Force;
+```
+
 
 <!--
 ```Anaconda Powershell Admin
