@@ -1,17 +1,17 @@
 ipywidgets==8.1.7
-applyllm==0.0.8.post1
+applyllm==0.0.9.rc3
 
-# transformers==4.56.2
-# accelerate==1.10.1
-transformers==4.57.3
-accelerate==1.12.0
+# transformers==4.57.3
+# accelerate==1.12.0
+transformers==5.5.0
+accelerate==1.13.0
 
-# torch==2.9.0
-# torchaudio==2.9.0
-# torchvision==0.24.0
-torch==2.9.1
-torchaudio==2.9.1
-torchvision==0.24.1
+# torch==2.9.1
+# torchaudio==2.9.1
+# torchvision==0.24.1
+torch==2.11.0
+torchaudio==2.11.0
+torchvision==0.26.0
 
 # matplotlib==3.10.7
 matplotlib==3.10.8
@@ -22,8 +22,7 @@ pydantic==2.12.5
 # typing guard back port to 3.8 
 # typing-extensions==4.12.2
 
-# mlx==0.29.3
-# mlx-lm==0.28.3
-
-mlx==0.30.0
-mlx-lm==0.28.4
+# mlx==0.30.0
+# mlx-lm==0.28.4
+mlx==0.31.1
+mlx-lm==0.31.1
