@@ -31,7 +31,7 @@ $env:ENV_ROOT="${env:USERPROFILE}\Documents\VENV\${env:ENV_FULL_NAME}";
 ```
 
 ## Deactivate pip env
-# To deactivate an active environment, use
+To deactivate an active environment, use
 ```Powershell
 deactivate
 ```

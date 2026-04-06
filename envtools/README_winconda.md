@@ -47,7 +47,7 @@ conda activate "$HOME\Documents\VENV\${env:ENV_FULL_NAME}";
 ```
 
 ## Deactivate conda env
-# To deactivate an active environment, use
+To deactivate an active environment, use
 ```Powershell
 conda deactivate
 ```
