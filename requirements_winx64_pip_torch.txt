@@ -1,0 +1,7 @@
+# pytorch xpu packages (installed from pytorch xpu index)
+# install separately: pip install -r requirements_winx64_pip_torch.txt
+# intel-extension-for-pytorch is deprecated, use xpu in torch directly
+--index-url https://download.pytorch.org/whl/xpu
+torch==2.11.0
+torchvision==0.26.0
+torchaudio==2.11.0

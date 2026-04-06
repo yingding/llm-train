@@ -1,0 +1,21 @@
+ipywidgets==8.1.8
+applyllm==0.0.10
+
+transformers>=5.5.0
+accelerate==1.13.0
+
+# matplotlib>=3.10.0
+matplotlib==3.10.8
+tiktoken==0.12.0
+# pydantic==2.11.7
+pydantic==2.12.5
+# typing guard back port to 3.8 
+typing-extensions==4.15.0
+bitsandbytes==0.49.2
+
+# for building the packages
+# build==1.4.2
+# twine==6.2.0
+--index-url https://pypi.org/simple
+
+# pytorch xpu packages: pip install -r requirements_winx64_pip_torch.txt

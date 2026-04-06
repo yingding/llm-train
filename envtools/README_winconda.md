@@ -51,4 +51,3 @@ conda activate "$HOME\Documents\VENV\${env:ENV_FULL_NAME}";
 ```Powershell
 conda deactivate
 ```
-
