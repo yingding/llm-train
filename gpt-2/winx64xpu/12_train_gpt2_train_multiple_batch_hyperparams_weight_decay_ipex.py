@@ -12,22 +12,20 @@ from dataclasses import dataclass
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
+import intel_extension_for_pytorch as ipex
 import os, sys
 import torchvision
-try:
-    import intel_extension_for_pytorch as ipex
-    HAS_IPEX = True
-except ImportError:
-    HAS_IPEX = False
 
 def print_xpu_info():
     print(f"torch version: {torch.__version__}")
     print(f"torchvision version: {torchvision.__version__}")
-    if HAS_IPEX:
-        print(f"ipex version: {ipex.__version__}")
+    print(f"ipex version: {ipex.__version__}")
     [print(f'[{i}]: {torch.xpu.get_device_properties(i)}') for i in range(torch.xpu.device_count())]
     # xpus = [f'[{i}]: {torch.xpu.get_device_properties(i)}' for i in range(torch.xpu.device_count())]
     # [print(xpu) for xpu in xpus]
+
+
+print_xpu_info()
 
 
 # XPU/GPU and NPU doesn't work together using torch
@@ -319,7 +317,7 @@ class GPT(nn.Module):
         # Create AdamW optimizer and use the fused version if it is available
         # kernel fusion, instead of running multiple kernels, and iterate though the tensors
         fused_available = 'fused' in inspect.signature(torch.optim.AdamW).parameters
-        use_fused = fused_available and ('cuda' in device or 'xpu' in device)
+        use_fused = fused_available and 'cuda' in device
         print(f"using fused AdamW: {use_fused}")
         optimizer = torch.optim.AdamW(optim_groups, lr=learning_rate, betas=(0.9, 0.95), eps=1e-8, fused=use_fused)
         return optimizer
@@ -327,21 +325,19 @@ class GPT(nn.Module):
 import tiktoken
 
 class DataLoaderLite:
-    def __init__(self, B, T, data_path, model='gpt2', token_device='cpu'):
+    def __init__(self, B, T, data_path, model='gpt2'):
         self.B = B
         self.T = T
         self.data_path = data_path,
         self.model = model
-        self.token_device = token_device
 
         # at init load tokens from disk and store them in memory
         with open(data_path, 'r') as f:
             text = f.read()
         enc = tiktoken.get_encoding(self.model)
         tokens = enc.encode(text)
-        # keep tokens on accelerator to avoid per-step CPU->device copies
-        self.tokens = torch.tensor(tokens, device=self.token_device)
-        print(f"loaded {len(self.tokens)} tokens on {self.token_device}")
+        self.tokens = torch.tensor(tokens)
+        print(f"loaded {len(self.tokens)} tokens")
         print(f"1 epoch = {len(self.tokens) // (B * T)} batches")
 
         # state
@@ -399,10 +395,7 @@ print(training_data_path)
 
 # train_loader = DataLoaderLite(B=4, T=32, data_path=training_data_path)
 # Batch size B should be the number of power of 2 to run efficiently on the GPU
-# B=32 increases work per kernel launch to better saturate XPU (48GB shared memory has headroom)
-# Drop B=16 if OOM
-token_device = device if device in ("cuda", "xpu", "mps") else "cpu"
-train_loader = DataLoaderLite(B=16, T=1024, data_path=training_data_path, token_device=token_device)
+train_loader = DataLoaderLite(B=16, T=1024, data_path=training_data_path)
 
 # set the float32 matmul precision to high, to use the high precision matmul kernels
 # 'highest' uses FP32, 'high' uses TF32
@@ -469,54 +462,35 @@ elif device == "mps":
     # https://discuss.pytorch.org/t/jitting-fails-on-mps-device/192079
     model = torch.compile(model, backend="aot_eager")
 elif device == "xpu":
-    if HAS_IPEX:
-        # IPEX optimize: kernel fusion + operator reordering + BF16 optimization for XPU
-        # https://intel.github.io/intel-extension-for-pytorch/xpu/latest/tutorials/getting_started.html
-        model, optimizer = ipex.optimize(model, optimizer=optimizer, dtype=torch.bfloat16)
-    else:
-        # torch.compile backends (inductor, aot_eager) are unreliable on Windows XPU:
-        # - inductor requires Triton + C compiler (not available)
-        # - aot_eager crashes on _to_copy bf16->fp32 ops
-        # pure eager mode is the most reliable and fastest fallback without IPEX
-        # https://docs.pytorch.org/docs/stable/xpu.html
-        print("using pure eager mode for XPU (install intel-extension-for-pytorch for kernel fusion)")
-
-# Batch flush cadence: accumulate events+metrics for log_every steps, then sync once and print all
-log_every = 10
-# cache of (start_event, end_event, loss_tensor, norm_value, lr_value, step_idx) per step
-pending_logs = []
+    # dtype bfloat16, float16, float32
+    # https://intel.github.io/intel-extension-for-pytorch/xpu/latest/tutorials/getting_started.html
+    model, optimizer = ipex.optimize(model, optimizer=optimizer, dtype=torch.bfloat16)
 
 for step in range(max_steps):
-    # tokens already live on the accelerator, no CPU->device copy needed
+    t0 = time.time()
+    # keep the batch on the cpu, to not waste GPU memory
     x, y = train_loader.next_batch()
-
-    # use torch.xpu.Event for precise non-blocking GPU timing (avoids synchronize overhead)
-    # https://docs.pytorch.org/docs/stable/xpu.html#streams-and-events
-    if device == "xpu":
-        start_event = torch.xpu.Event(enable_timing=True)
-        end_event = torch.xpu.Event(enable_timing=True)
-        start_event.record()
-    elif device == "cuda":
-        start_event = torch.cuda.Event(enable_timing=True)
-        end_event = torch.cuda.Event(enable_timing=True)
-        start_event.record()
-    else:
-        t0 = time.time()
+    # move tensors to the device
+    x, y = x.to(device), y.to(device)
 
     # Enables autocasting for the forward pass (model + loss)
+    # with torch.autocast(device_type="cuda"):
     if device == "cuda":
         with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
-            # set_to_none=True avoids memset and reduces host overhead
-            optimizer.zero_grad(set_to_none=True)
+            # start with a zero gradient
+            optimizer.zero_grad()
             logits, loss = model(x, y)
     elif device == "mps":
-        optimizer.zero_grad(set_to_none=True)
+        optimizer.zero_grad()
         logits, loss = model(x, y)
     elif device == "xpu":
-        # Removes unnecessary repeated CPU-GPU sync overhead with cache_enabled=True
-        with torch.amp.autocast(device_type="xpu", dtype=torch.bfloat16, cache_enabled=True):
-            optimizer.zero_grad(set_to_none=True)
+        # with torch.xpu.amp.autocast(enabled=True, dtype=torch.bfloat16, cache_enabled=False):
+        with torch.amp.autocast(device_type="xpu", dtype=torch.bfloat16, cache_enabled=False):
+            optimizer.zero_grad()
             logits, loss = model(x, y)
+        # with torch.autocast(device_type="xpu", dtype=torch.bfloat16):
+        #     optimizer.zero_grad()
+        #     logits, loss = model(x, y)  
 
     # Exits the context manager before backward()
     # adds the loss to gradients
@@ -529,32 +503,22 @@ for step in range(max_steps):
         param_group['lr'] = lr
     # update the weights/parameters and decrease the loss
     optimizer.step()
+    # cpu building up work queue for the GPU, so we need to wait for the GPU to finish
+    if device == "cuda":
+        torch.cuda.synchronize()
+    elif device == "mps":
+        torch.mps.synchronize()
+    elif device == "xpu":
+        torch.xpu.synchronize()
 
-    # record end event and cache metrics — no sync yet, GPU keeps running
-    if device in ("xpu", "cuda"):
-        end_event.record()
-        # detach loss to avoid holding the computation graph; .item() is deferred until flush
-        pending_logs.append((start_event, end_event, loss.detach(), norm.item(), lr, step))
-    else:
-        t1 = time.time()
-        dt = (t1 - t0) * 1000
-        pending_logs.append((None, None, loss.detach(), norm.item(), lr, step, dt))
-
-    # flush all cached logs every log_every steps (or at the very last step)
-    if (step + 1) % log_every == 0 or step == max_steps - 1:
-        # one sync to resolve all pending events at once
-        if device in ("xpu", "cuda") and pending_logs:
-            pending_logs[-1][1].synchronize()  # sync on the last end_event covers all prior events
-
-        for entry in pending_logs:
-            if device in ("xpu", "cuda"):
-                se, ee, l, n, lr_val, s = entry
-                dt = se.elapsed_time(ee)  # milliseconds, measured on GPU
-            else:
-                _, _, l, n, lr_val, s, dt = entry
-            tokens_per_sec = (train_loader.B * train_loader.T) / (dt / 1000.0)
-            print(f"step {s:4d} | loss: {l.item():.6f} | lr {lr_val:.4e} | norm: {n:.4f} | dt: {dt:.2f}ms | tokens/sec: {tokens_per_sec:.2f}")
-        pending_logs.clear()
+    t1 = time.time()
+    dt = (t1 - t0)*1000 # time difference in milliseconds
+    # thoughput in tokens per second during the training, an objective metric
+    tokens_per_sec = (train_loader.B * train_loader.T) / (t1 - t0)
+    # loss is a tensor with a single element, loss.item() will convert tensor to a single float on CPU
+    # loss is a tensor on the GPU, so we need to move it to the CPU to print it
+    # print(f"step {i}, loss: {loss.item()}, dt: {dt:.2f}ms, tokens/sec: {tokens_per_sec:.2f}")
+    print(f"step {step:4d} | loss: {loss.item():.6f} | lr {lr:.4e} | norm: {norm:.4f} | dt: {dt:.2f}ms | tokens/sec: {tokens_per_sec:.2f}")
 # we are overfitting a single batch, so that the transformer can memorize the sequence.
 # we shall see the loss decrease to zero
 

@@ -80,7 +80,20 @@ if ($PM -notin $validPM) {
         #     $condaCmd = "$env:USERPROFILE\AppData\Local\miniconda312\Scripts\conda.exe";
         # }
         # $condaCmd = "$env:USERPROFILE\AppData\Local\miniconda3\Scripts\conda.exe";
-        $condaCmd = "C:\ProgramData\miniconda3\Scripts\conda.exe";
+        $condaCmd = (where.exe conda 2>$null | Select-Object -First 1);
+        if (-not $condaCmd) {
+            $condaCandidates = @(
+                "C:\ProgramData\miniconda3\Scripts\conda.exe",
+                "$env:USERPROFILE\AppData\Local\miniconda3\Scripts\conda.exe",
+                "$env:USERPROFILE\miniconda3\Scripts\conda.exe"
+            );
+            $condaCmd = $condaCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1;
+        }
+        if (-not $condaCmd) {
+            Write-Error "conda.exe not found. Please install Miniconda or Anaconda and ensure it is in PATH or a standard location.";
+            exit 1;
+        }
+        Write-Host "Using conda at: $condaCmd";
 
         # accept the terms of the channel
         Invoke-Expression "& $condaCmd tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main";

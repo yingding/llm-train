@@ -8,7 +8,7 @@ channels:
 # use libuv==1.39 for windows
 # acording to the torch page https://pypi.org/project/torch/
 dependencies:
-- python==3.13.12
+- python==3.13
 - libuv>=1.48.0
 - libjpeg-turbo
 - libpng

@@ -2,6 +2,26 @@
 Use Powershell 7x to run the cmds to create python venv with pip.
 Use Anaconda Powershell Prompt to run the cmds to create python venv with conda.
 
+## Create a windows native XPU Training env
+Install the Intell extension
+```Powershell
+cd $env:USERPROFILE\Documents\VCS\llm-train;
+$env:VERSION="3.13";
+$env:ENV_NAME="train";
+$env:ENV_SURFIX="winconda";
+$env:PM="conda";
+.\envtools\create_env.ps1 -VERSION $env:VERSION -ENV_NAME $env:ENV_NAME -ENV_SURFIX $env:ENV_SURFIX -PM $env:PM;
+
+
+# path env
+# cd $env:USERPROFILE\Documents\VCS\llm-train;
+# --prefix is the full path
+conda env update --prefix "${env:USERPROFILE}\Documents\VENV\${env:ENV_NAME}" --file environment_winx64.yml
+
+# which pip
+which pip
+```
+
 ## Create a windows native python venv using pip
 Open 
 ```powershell
@@ -106,6 +126,8 @@ Remove-Item -Path ${env:ENV_PATH} -Recurse -Force;
 ```
 
 
+
+
 <!--
 ```Anaconda Powershell Admin
 # update base
@@ -137,7 +159,7 @@ which pip
 
 Training framework
 
-xpu
+xpu python2.12
 ```Anaconda Powershell
 $env:VERSION = "3.12";
 $env:ENV_NAME = "gpt${env:VERSION}winconda";
