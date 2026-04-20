@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memory Health Dashboard</title>
+<style>
+:root {
+  --bg: #f5f6fa; --fg: #2c3e50; --card-bg: #fff; --border: #dfe6e9;
+  --table-hover: #f0f3ff; --pre-bg: #f8f9fa;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1e1e2e; --fg: #cdd6f4; --card-bg: #313244; --border: #45475a;
+    --table-hover: #45475a; --pre-bg: #313244;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg); color: var(--fg); padding: 1.5rem; max-width: 1200px; margin: 0 auto; }
+h1 { margin-bottom: 0.3rem; }
+.subtitle { color: #7f8c8d; margin-bottom: 1.5rem; font-size: 0.9rem; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+.card-value { font-size: 1.8rem; font-weight: 700; }
+.card-label { font-size: 0.8rem; color: #7f8c8d; margin-top: 0.3rem; }
+.card-warn { border-color: #e74c3c; }
+.card-ok { border-color: #2ecc71; }
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.chart-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+.chart-box h3 { font-size: 0.9rem; margin-bottom: 0.8rem; }
+.bar-row { display: flex; align-items: center; margin-bottom: 0.4rem; }
+.bar-label { width: 100px; font-size: 0.8rem; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+.bar { height: 18px; border-radius: 3px; min-width: 4px; transition: width 0.3s; }
+.bar-val { margin-left: 0.5rem; font-size: 0.8rem; font-weight: 600; }
+.table-wrap { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow-x: auto; margin-bottom: 1.5rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th { cursor: pointer; background: var(--bg); padding: 0.6rem 0.8rem; text-align: left; border-bottom: 2px solid var(--border); user-select: none; }
+td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); }
+.entry-row:hover { background: var(--table-hover); cursor: pointer; }
+.entry-body pre { white-space: pre-wrap; word-break: break-word; font-size: 0.8rem;
+  background: var(--pre-bg); padding: 0.8rem; border-radius: 4px; max-height: 300px; overflow-y: auto; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; color: #fff; font-size: 0.75rem; font-weight: 600; }
+.stale-flag { font-size: 0.9rem; }
+.timeline { display: flex; align-items: flex-end; gap: 0; padding: 1rem 0; overflow-x: auto;
+  border-bottom: 2px solid var(--border); position: relative; }
+.tl-dot { flex: 1; min-width: 80px; text-align: center; position: relative; padding-bottom: 1.2rem; cursor: default; }
+.tl-dot::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 12px; height: 12px; border-radius: 50%; background: #e74c3c; }
+.tl-label { font-size: 0.7rem; word-break: break-word; }
+.tl-date { font-size: 0.65rem; color: #7f8c8d; }
+h2 { margin: 1.5rem 0 0.8rem; font-size: 1.1rem; }
+</style>
+</head>
+<body>
+<h1>Memory Health Dashboard</h1>
+<div class="subtitle">Generated 2026-04-20 &middot; 5 entries</div>
+
+
+    <div class="cards">
+      <div class="card"><div class="card-value">5</div><div class="card-label">entries in 5 files</div></div>
+      <div class="card"><div class="card-value">5/0/0</div><div class="card-label">high / med / low</div></div>
+      <div class="card card-warn"><div class="card-value">1</div><div class="card-label">stale (&gt;30d)</div></div>
+      <div class="card card-ok"><div class="card-value">0</div><div class="card-label">mismatches</div></div>
+      <div class="card card-warn"><div class="card-value">1</div><div class="card-label">contradictions</div></div>
+    </div>
+
+<h2>Distributions</h2>
+
+    <div class="charts">
+      <div class="chart-box"><h3>Topic Balance</h3><div class="bar-row"><span class="bar-label">project-setup</span><div class="bar" style="width:100%;background:#5b8def"></div><span class="bar-val">2</span></div>
+<div class="bar-row"><span class="bar-label">anti-patterns</span><div class="bar" style="width:50%;background:#5b8def"></div><span class="bar-val">1</span></div>
+<div class="bar-row"><span class="bar-label">conventions</span><div class="bar" style="width:50%;background:#5b8def"></div><span class="bar-val">1</span></div>
+<div class="bar-row"><span class="bar-label">workflow</span><div class="bar" style="width:50%;background:#5b8def"></div><span class="bar-val">1</span></div>
+<div class="bar-row"><span class="bar-label">tools</span><div class="bar" style="width:0%;background:#5b8def"></div><span class="bar-val">0</span></div></div>
+      <div class="chart-box"><h3>Confidence</h3><div class="bar-row"><span class="bar-label">high</span><div class="bar" style="width:100%;background:#2ecc71"></div><span class="bar-val">5</span></div>
+<div class="bar-row"><span class="bar-label">medium</span><div class="bar" style="width:0%;background:#f39c12"></div><span class="bar-val">0</span></div>
+<div class="bar-row"><span class="bar-label">low</span><div class="bar" style="width:0%;background:#e74c3c"></div><span class="bar-val">0</span></div></div>
+      <div class="chart-box"><h3>Source</h3><div class="bar-row"><span class="bar-label">conversation</span><div class="bar" style="width:100%;background:#8e44ad"></div><span class="bar-val">2</span></div>
+<div class="bar-row"><span class="bar-label">observation</span><div class="bar" style="width:100%;background:#8e44ad"></div><span class="bar-val">2</span></div>
+<div class="bar-row"><span class="bar-label">correction</span><div class="bar" style="width:50%;background:#8e44ad"></div><span class="bar-val">1</span></div></div>
+    </div>
+
+<h2>All Entries</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th onclick="sortTable(0)">Heading ⇅</th>
+          <th onclick="sortTable(1)">File ⇅</th>
+          <th onclick="sortTable(2)">Confidence ⇅</th>
+          <th onclick="sortTable(3)">Source ⇅</th>
+          <th onclick="sortTable(4)">Verified ⇅</th>
+          <th onclick="sortTable(5)">Last Verified ⇅</th>
+        </tr></thead>
+        <tbody><tr class="entry-row" onclick="toggleBody(this)"><td>Used --extra-index-url instead of split files initially <span class="stale-flag">⚠️</span></td><td>anti-patterns</td><td><span class="badge" style="background:#2ecc71">high</span></td><td>correction</td><td>0</td><td>—</td></tr><tr class="entry-body" style="display:none"><td colspan="6"><pre>What happened: Initially put torch packages in the same requirements file with `--extra-index-url https://download.pytorch.org/whl/xpu`, which doesn&#x27;t guarantee torch is installed exclusively from the XPU index.
+
+Why it was wrong: pip&#x27;s `--extra-index-url` is global and doesn&#x27;t restrict which packages come from which index. Packages could resolve from either index unpredictably.
+
+Lesson: When packages must come from a specific index, split into separate requirements files with their own `--index</pre></td></tr><tr class="entry-row" onclick="toggleBody(this)"><td>Split pip requirements for mixed index sources</td><td>conventions</td><td><span class="badge" style="background:#2ecc71">high</span></td><td>conversation</td><td>1</td><td>2026-04-20</td></tr><tr class="entry-body" style="display:none"><td colspan="6"><pre>A single requirements.txt cannot restrict specific packages to specific indexes — `--index-url` and `--extra-index-url` are global. To ensure torch packages come only from the PyTorch XPU index, split into two files:
+- `requirements_winx64_pip_torch.txt` with `--index-url https://download.pytorch.org/whl/xpu`
+- `requirements_winx64_pip.txt` with `--index-url https://pypi.org/simple`
+Install order: torch file first, then main file.</pre></td></tr><tr class="entry-row" onclick="toggleBody(this)"><td>Intel XPU support in PyTorch</td><td>project-setup</td><td><span class="badge" style="background:#2ecc71">high</span></td><td>conversation</td><td>1</td><td>2026-04-20</td></tr><tr class="entry-body" style="display:none"><td colspan="6"><pre>As of torch 2.11.0, Intel XPU support is built directly into PyTorch. `intel-extension-for-pytorch` is deprecated and should not be used. Install torch with `--index-url https://download.pytorch.org/whl/xpu` to get XPU-enabled builds.</pre></td></tr><tr class="entry-row" onclick="toggleBody(this)"><td>Current project versions and env layout</td><td>project-setup</td><td><span class="badge" style="background:#2ecc71">high</span></td><td>observation</td><td>1</td><td>2026-04-20</td></tr><tr class="entry-body" style="display:none"><td colspan="6"><pre>Key versions: torch==2.11.0, torchvision==0.26.0, torchaudio==2.11.0, Python 3.13. Working branch: `xpu`. Training venvs stored at `$USERPROFILE\Documents\VENV\`. Env naming: `{name}{version}{suffix}` e.g. `train3.13winconda`, `train3.13pip`.</pre></td></tr><tr class="entry-row" onclick="toggleBody(this)"><td>Environment setup documentation structure</td><td>workflow</td><td><span class="badge" style="background:#2ecc71">high</span></td><td>observation</td><td>1</td><td>2026-04-20</td></tr><tr class="entry-body" style="display:none"><td colspan="6"><pre>Env setup docs split by package manager:
+- `envtools/README_winconda.md` — conda-based setup with `conda env update --prefix`
+- `envtools/README_winpip.md` — pip-based setup
+- `envtools/create_env.ps1` / `create_env.sh` — shared env creation scripts
+- Conda envs use `environment_winx64*.yml`, pip envs use `requirements_winx64_pip*.txt`</pre></td></tr></tbody>
+      </table>
+    </div>
+
+<h2>Anti-Pattern Timeline</h2>
+<div class="timeline"><div class="tl-dot" title="2026-04-20: Used --extra-index-url instead of split files initially"><div class="tl-label">Used --extra-index-url in</div><div class="tl-date">2026-04-20</div></div></div>
+
+<script>
+function toggleBody(row) {
+  const body = row.nextElementSibling;
+  body.style.display = body.style.display === 'none' ? '' : 'none';
+}
+function sortTable(col) {
+  const table = document.querySelector('table');
+  const tbody = table.querySelector('tbody');
+  const pairs = [];
+  const rows = tbody.querySelectorAll('tr.entry-row');
+  rows.forEach(r => {
+    pairs.push([r, r.nextElementSibling]);
+  });
+  const dir = table.dataset.sortCol == col && table.dataset.sortDir === 'asc' ? 'desc' : 'asc';
+  table.dataset.sortCol = col;
+  table.dataset.sortDir = dir;
+  pairs.sort((a, b) => {
+    const ta = a[0].children[col].textContent.trim().toLowerCase();
+    const tb = b[0].children[col].textContent.trim().toLowerCase();
+    const na = parseFloat(ta), nb = parseFloat(tb);
+    let cmp = 0;
+    if (!isNaN(na) && !isNaN(nb)) cmp = na - nb;
+    else cmp = ta.localeCompare(tb);
+    return dir === 'asc' ? cmp : -cmp;
+  });
+  pairs.forEach(([r, b]) => { tbody.appendChild(r); tbody.appendChild(b); });
+}
+</script>
+</body>
+</html>
