@@ -6,16 +6,14 @@ entry_count: 2
 last_updated: 2026-04-20
 ---
 
-
-# Project Setup
-
 ## Intel XPU support in PyTorch
 - confidence: high
 - source: conversation
-- verified_count: 1
+- verified_count: 2
 - last_verified: 2026-04-20
 
 As of torch 2.11.0, Intel XPU support is built directly into PyTorch. `intel-extension-for-pytorch` is deprecated and should not be used. Install torch with `--index-url https://download.pytorch.org/whl/xpu` to get XPU-enabled builds.
+Related: see "Split pip requirements for mixed index sources" (conventions.md) for the install pattern.
 
 ## Current project versions and env layout
 - confidence: high
